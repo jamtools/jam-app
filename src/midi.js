@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import rx from 'rx';
 
 let midi
 let data
@@ -26,7 +26,7 @@ function onMIDISuccess(midi) {
     const inputsArray = []
     const inputValues = inputs.values()
     for (let input = inputValues.next(); input && !input.done; input = inputValues.next()) {
-      const inputObservable = Rx.Observable.create(observer => {
+      const inputObservable = rx.Observable.create(observer => {
         input.value.onmidimessage = msg => observer.OnNext(msg)
       })
       inputsArray.push(inputObservable)

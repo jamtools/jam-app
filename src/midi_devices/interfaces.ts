@@ -1,4 +1,4 @@
-import {Observable} from 'Rx'
+import {Observable} from 'rx'
 import {Chord, Note} from '../model-interfaces'
 
 export interface InputMessage {
@@ -36,3 +36,9 @@ export interface WebMidiOutput {
   playNote(note: any): void
   stopNote(note: any): void
 }
+
+export interface MidiInitializer {
+
+}
+
+export interface

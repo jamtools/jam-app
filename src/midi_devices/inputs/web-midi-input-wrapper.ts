@@ -1,5 +1,13 @@
-import {Observable} from 'Rx'
-import {InputDevice, InputMessage, Note, WebMidiInput, MidiEvent} from '../interfaces'
+import {Observable} from 'rx'
+import {logBefore as log} from '../../Logger'
+// import Config from '../../Config'
+import {
+  InputDevice,
+  // InputMessage,
+  WebMidiInput,
+  MidiEvent,
+} from '../interfaces'
+import {Note} from '../../model-interfaces'
 
 export default class WebMidiInputWrapper implements InputDevice {
   heldDownNotes: Array<Note> = []
@@ -19,18 +27,19 @@ export default class WebMidiInputWrapper implements InputDevice {
     return this.heldDownNotes
   }
 
+  @log('debug')
   noteOff(e: MidiEvent) {
-    console.log(e)
     const targetNoteNumber = e.note.number
     const arrayMember = this.heldDownNotes.find(note => note.number === targetNoteNumber)
     this.heldDownNotes.splice(this.heldDownNotes.indexOf(arrayMember), 1)
-    // this.observer.next([...this.heldDownNotes])
+    this.observer.next([...this.heldDownNotes])
   }
 
+
+  @log('debug')
   noteOn(e: MidiEvent) {
-    console.log(e)
     this.heldDownNotes.push(e.note)
-    //this.observer.next([...this.heldDownNotes])
+    this.observer.next([...this.heldDownNotes])
   }
 
   destroy() {
