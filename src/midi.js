@@ -1,4 +1,4 @@
-import rx from 'rx';
+import rx from 'rxjs';
 
 let midi
 let data

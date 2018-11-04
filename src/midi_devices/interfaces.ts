@@ -1,4 +1,4 @@
-import {Observable} from 'rx'
+import {Observable} from 'rxjs'
 import {Chord, Note} from '../model-interfaces'
 
 export interface InputMessage {

@@ -1,4 +1,4 @@
 {
-  "presets": ["env", "react"],
-  "plugins": ["transform-runtime"]
+  "presets": [["@babel/env", {"modules": true}], "@babel/react", "@babel/preset-typescript"],
+  "plugins": ["@babel/plugin-transform-runtime"]
 }

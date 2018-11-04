@@ -12,7 +12,7 @@ describe('ProgrammaticInput', () => {
 
   it('it should return the notes that are assigned to it', () => {
     const notes = [{b: 3}]
-    this.input.setCurrentHeldDownNotes(notes)
+    this.input.setCurrentlyHeldDownNotes(notes)
     expect(this.input.getCurrentlyHeldDownNotes()).to.equal(notes)
   })
 })

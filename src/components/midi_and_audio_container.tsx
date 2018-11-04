@@ -9,6 +9,7 @@ import {InputDevice, OutputDevice, WebMidiInput, WebMidiOutput} from '../midi_de
 import {Chord, Note} from '../model-interfaces'
 import RecordingModeProcessor from '../midi_processing/recording_mode_processor'
 import PlaybackModeProcessor from '../midi_processing/playback_mode_processor'
+import Qwerty from '../qwerty/qwerty'
 
 import ActiveInputDevice from '../components/ActiveInputDevice'
 import ActiveOutputDevice from '../components/ActiveOutputDevice'
@@ -32,7 +33,7 @@ const MidiDeviceList = props => (
   </div>
 )
 
-interface MainState {
+interface MainProps {
   inputs: Array<InputDevice>
   activeInput: InputDevice
   outputs: Array<OutputDevice>
@@ -46,25 +47,15 @@ interface WebMidiLibrary {
   enable:((err: Error) => void)
 }
 
-class MidiAndAudioContainer extends React.PureComponent {
+class MidiAndAudioContainer extends React.PureComponent<MainProps & {setState: (a: any) => void}> {
   private playbackModeProcessor: PlaybackModeProcessor
   private recordingModeProcessor: RecordingModeProcessor
-
-  state : MainState = {
-    inputs: [],
-    activeInput: null,
-    outputs: [],
-    activeOutput: null,
-    currentMode: 'recording',
-    chords: [],
-    heldDownNotes: [],
-  }
 
   componentDidMount() {
     window.main = this
     this.doStaticInputStuff()
-    this.doOutputSynthStuff()
-    // this.doWebMidiStuff()
+    // this.doOutputSynthStuff()
+    this.doWebMidiStuff()
     //this.doOutputSynthStuff()
     window.setNotes = this.setStaticHeldDown.bind(this)
     window.functions = {
@@ -76,24 +67,24 @@ class MidiAndAudioContainer extends React.PureComponent {
   }
 
   setActiveOutputDevice(outputDevice: OutputDevice) {
-    this.setState({
+    this.props.setState({
       activeOutput: outputDevice,
     })
     this.playbackModeProcessor = new PlaybackModeProcessor(outputDevice)
   }
 
   setActiveInputDevice(inputDevice: InputDevice) {
-    this.setState({
+    this.props.setState({
       activeInput: inputDevice,
     })
     this.recordingModeProcessor = new RecordingModeProcessor(inputDevice)
     inputDevice.observable.subscribe((notesArr: Array<Note>) => {
-      this.setState({heldDownNotes: notesArr})
+      this.props.setState({heldDownNotes: notesArr})
     })
   }
 
   setStaticHeldDown(notesArray) {
-    this.state.activeInput.setCurrentlyHeldDownNotes(notesArray)
+    this.props.activeInput.setCurrentlyHeldDownNotes(notesArray)
   }
 
   doStaticInputStuff() {
@@ -105,8 +96,8 @@ class MidiAndAudioContainer extends React.PureComponent {
 
     const pInput = new ProgrammaticInput()
     pInput.setCurrentlyHeldDownNotes(notes)
-    this.setState({
-      inputs: this.state.inputs.concat([pInput]),
+    this.props.setState({
+      inputs: this.props.inputs.concat([pInput]),
     })
     this.setActiveInputDevice(pInput)
   }
@@ -114,8 +105,8 @@ class MidiAndAudioContainer extends React.PureComponent {
   doOutputSynthStuff() {
     const synth = this.createSynth()
     const synthOutputDevice = new SoftwareSynthOutput(synth)
-    this.setState({
-      outputs: this.state.outputs.concat([synthOutputDevice])
+    this.props.setState({
+      outputs: this.props.outputs.concat([synthOutputDevice])
     })
     this.setActiveOutputDevice(synthOutputDevice)
   }
@@ -126,18 +117,19 @@ class MidiAndAudioContainer extends React.PureComponent {
         alert(err)
         return
       }
+      debugger
       console.log(WebMidi.inputs)
       console.log(WebMidi.outputs)
       const {inputs, outputs} = WebMidi
 
       const inputWrappers = inputs.map((input: WebMidiInput) => new WebMidiInputWrapper(input))
       const outputWrappers = outputs.map((output: WebMidiOutput) => new WebMidiOutputWrapper(output))
-      this.setState({
-        inputs: this.state.inputs.concat([inputWrappers[2]]),
-        outputs: this.state.outputs.concat([outputWrappers[1]]),
+      this.props.setState({
+        // inputs: this.props.inputs.concat(inputWrappers),
+        outputs: this.props.outputs.concat(outputWrappers),
       })
-      if(inputWrappers.length) this.setActiveInputDevice(inputWrappers[2])
-      if(outputWrappers.length) this.setActiveOutputDevice(outputWrappers[1])
+      // if(inputWrappers.length) this.setActiveInputDevice(inputWrappers[1])
+      if(outputWrappers.length) this.setActiveOutputDevice(outputWrappers[0])
     })
     window.WebMidi = WebMidi
 
@@ -152,17 +144,17 @@ class MidiAndAudioContainer extends React.PureComponent {
     return synth
   }
 
-  saveChord() {
+  saveChord = () => {
     const chord: Chord = this.recordingModeProcessor.saveChord()
-    const chords = this.state.chords.concat([chord])
-    this.setState({chords})
+    const chords = this.props.chords.concat([chord])
+    this.props.setState({chords})
     this.playbackModeProcessor.setChords(chords)
   }
 
 
 
   render() {
-    const {inputs, activeInput, outputs, activeOutput, chords, heldDownNotes} = this.state
+    const {inputs, activeInput, outputs, activeOutput, chords, heldDownNotes} = this.props
     return (
       <div>
         {/*<h1>Main</h1>
@@ -177,6 +169,14 @@ class MidiAndAudioContainer extends React.PureComponent {
         <button onClick={() => this.playbackModeProcessor.playChord()}>Play Chord</button>
         <button onClick={() => this.playbackModeProcessor.gotoNextChord()}>Next Chord</button>
         <button onClick={() => this.playbackModeProcessor.stopPlaying()}>Stop Playing</button>
+        <Qwerty
+          mappedKeys={{
+            'c': this.saveChord,
+            'm': () => this.playbackModeProcessor.playChord(),
+            'ContextMenu': () => this.playbackModeProcessor.gotoNextChord(),
+            'ArrowDown': () => this.playbackModeProcessor.stopPlaying(),
+          }}
+        />
       </div>
     )
   }

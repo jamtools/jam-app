@@ -1,6 +1,7 @@
 import {IStringTMap} from '../../../src/util/interfaces'
 
-import {WebMidiInput, MidiEvent, Note} from '../../../src/midi_devices/interfaces'
+import {WebMidiInput, MidiEvent} from '../../../src/midi_devices/interfaces'
+import {Note} from '../../../src/model-interfaces'
 
 export default class MockMidiInputDevice implements WebMidiInput {
   handlers: IStringTMap<(e: MidiEvent) => void> = {}

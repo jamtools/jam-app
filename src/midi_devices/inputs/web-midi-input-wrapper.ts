@@ -1,4 +1,4 @@
-import {Observable} from 'rx'
+import {Observable, BehaviorSubject} from 'rxjs'
 import {logBefore as log} from '../../Logger'
 // import Config from '../../Config'
 import {
@@ -11,16 +11,14 @@ import {Note} from '../../model-interfaces'
 
 export default class WebMidiInputWrapper implements InputDevice {
   heldDownNotes: Array<Note> = []
-  observable: Observable<Array<Note>>
+  observable: BehaviorSubject<Array<Note>>
   observer: any
 
   constructor(private webMidiInput: WebMidiInput) {
     webMidiInput.addListener('noteon', 'all', e => this.noteOn(e))
     webMidiInput.addListener('noteoff', 'all', e => this.noteOff(e))
 
-    this.observable = Observable.create((observer: any) => {
-      this.observer = observer
-    })
+    this.observable = new BehaviorSubject<Array<Note>>([])
   }
 
   getCurrentlyHeldDownNotes(): Array<Note> {
@@ -32,14 +30,14 @@ export default class WebMidiInputWrapper implements InputDevice {
     const targetNoteNumber = e.note.number
     const arrayMember = this.heldDownNotes.find(note => note.number === targetNoteNumber)
     this.heldDownNotes.splice(this.heldDownNotes.indexOf(arrayMember), 1)
-    this.observer.next([...this.heldDownNotes])
+    this.observable.next([...this.heldDownNotes])
   }
 
 
   @log('debug')
   noteOn(e: MidiEvent) {
     this.heldDownNotes.push(e.note)
-    this.observer.next([...this.heldDownNotes])
+    this.observable.next([...this.heldDownNotes])
   }
 
   destroy() {

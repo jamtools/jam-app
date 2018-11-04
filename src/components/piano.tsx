@@ -20,14 +20,14 @@ const keyboardShortcuts = KeyboardShortcuts.create({
 import {Note, MidiNumber} from '../model-interfaces'
 
 type PianoState = {
-  notesHeld: MidiNumber[],
+  heldDownNotes: MidiNumber[],
 }
 
 const notes: MidiNumber[] = []
 
 class Piano extends React.PureComponent<any, PianoState> {
   state: PianoState = {
-    notesHeld: [],
+    heldDownNotes: [],
   }
 
   constructor(props: any) {
@@ -35,12 +35,14 @@ class Piano extends React.PureComponent<any, PianoState> {
     window.setNotes = this.setNotes
   }
 
-  setNotes = (notesHeld: MidiNumber[]) => {
-    this.setState({notesHeld})
+  setNotes = (heldDownNotes: MidiNumber[]) => {
+    this.setState({heldDownNotes})
   }
 
   render() {
-    const {notesHeld} = this.state
+    const {heldDownNotes} = this.props
+    debugger
+    const heldNumbers = heldDownNotes.map(n => n.number - 24)
 
     return (
       <div>
@@ -52,10 +54,10 @@ class Piano extends React.PureComponent<any, PianoState> {
           }}
           width={1000}
           keyboardShortcuts={keyboardShortcuts}
-          playbackNotes={notesHeld}
+          playbackNotes={heldNumbers}
         />
         <div>
-          {notesHeld.map((midiNumber: MidiNumber) => (
+          {heldNumbers.map((midiNumber: MidiNumber) => (
             <span key={midiNumber}>
               {midiNumber}
               <pre>
