@@ -7,7 +7,7 @@
     "parcel": "./node_modules/.bin/parcel src/index.html",
     "mocha": "./node_modules/.bin/mocha",
     "test": "yarn test-match spec/src/**/*.test.ts*",
-    "test-match": "yarn ts-mocha -p tsconfig.json --require spec/index.ts"
+    "test-match": "yarn ts-mocha -p tsconfig.json --require spec/index.ts --exit"
   },
   "repository": "git@github.com:mickmister/midi-jam-helper.git",
   "author": "mickmister <mjkochell@gmail.com>",
