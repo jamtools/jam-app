@@ -17,6 +17,9 @@ test_frontend:
   script:
     - yarn install --pure-lockfile
     - yarn test
+  only:
+    - /^qa-build.*$/
+    - branches
 
 # build_frontend:  # A job to build the static website - replace it with your build methods
 #   stage: build
