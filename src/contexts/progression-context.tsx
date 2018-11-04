@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react'
 
 import WebsocketContext from './websocket-context'
-import {useProgressionHook, ProgressionHookState, ProgressionHookActions} from '../hooks/local-progression-hook'
+import {useProgressionHook, ProgressionHookState, ProgressionHookActions, ProgressionHookValue} from '../hooks/local-progression-hook'
 
 type Props = {
   value?: ProgressionHookState,
@@ -16,19 +16,19 @@ export type ProgressionContextValue = {
 const Context = React.createContext({})
 
 export function ProgressionProvider(props: Props) {
-  const [progressionState, actions] = useProgressionHook(props.value, {useState})
+  const [progressionState, actions] = useProgressionHook(props.value, {useState, useContext})
 
-  const websocketState = useContext(WebsocketContext)
+  // const {state: websocketState} = useContext(WebsocketContext)
 
   const state = {
-    ...(websocketState && websocketState.value),
+    // ...websocketState,
     ...progressionState,
   }
 
   console.log(state)
 
   return (
-    <Context.Provider value={{state, actions}}>
+    <Context.Provider value={{state, actions} as ProgressionContextValue}>
       {props.children}
     </Context.Provider>
   )

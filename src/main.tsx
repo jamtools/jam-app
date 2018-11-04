@@ -7,6 +7,7 @@ import {InputDevice, OutputDevice} from './midi_devices/interfaces'
 import ProgressionView from './components/progression_view/progression_view'
 import ProgressionContext, {ProgressionProvider} from './contexts/progression-context'
 import WebsockerContext, {WebsocketProvider} from './contexts/websocket-context'
+import {PianoKeyProcessorProvider} from './contexts/piano-key-processor-context'
 
 interface MainState {
   inputs: Array<InputDevice>
@@ -39,11 +40,13 @@ export class Main extends React.PureComponent {
           "number": 84,
           "octave": 5,
         }]}]}}>
-          <div>
-            <Piano heldDownNotes={heldDownNotes} />
-            <ProgressionView />
-            {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
-          </div>
+          <PianoKeyProcessorProvider>
+            <div>
+              <Piano heldDownNotes={heldDownNotes} />
+              <ProgressionView />
+              {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
+            </div>
+          </PianoKeyProcessorProvider>
         </ProgressionProvider>
       </WebsocketProvider>
     )

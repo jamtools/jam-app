@@ -3,36 +3,68 @@ import io from 'socket.io-client'
 
 const WEBSOCKET_CONNECT_STRING = 'http://localhost:1337'
 
-type WebsocketMessage = {
-
+export type WebsocketMessage = {
+  type: string,
+  data: any,
+  acknowledged?: boolean,
 }
 
-type WebsocketState = any
+type WebsocketContextState = {
+  lastMessage?: WebsocketMessage,
+  socket: any,
+}
+
+type WebsocketContextActions = {
+  sendMessage: (msg: WebsocketMessage) => void,
+  markLastMessageAsAcknowledged: () => void,
+}
+
+export type WebsocketContextValue = {
+  state: WebsocketContextState,
+  actions: WebsocketContextActions,
+}
 
 const Context = React.createContext({})
-// const socket = io(WEBSOCKET_CONNECT_STRING)
+const socket = io(WEBSOCKET_CONNECT_STRING)
 
 export class WebsocketProvider extends React.PureComponent<any, WebsocketState> {
 
   state = {
-    // socket,
-    value: {},
+    lastMessage: null,
+    socket,
   }
 
   componentDidMount() {
-    // socket.on('message', this.handleMessage)
-    // window.socket = socket
+    socket.on('message', this.handleMessage)
   }
+
+  sendMessage = (msg: WebsocketMessage) => {
+    if (this.state.socket) {
+      this.state.socket.emit('message', msg)
+    }
+  }
+
+  markLastMessageAsAcknowledged = () => {
+    if (this.state.lastMessage) {
+      this.state.lastMessage.acknowledged = true
+      this.setState({lastMessage: {...this.state.lastMessage, acknowledged: true}})
+    }
+  }
+
+  actions = {
+    sendMessage: this.sendMessage,
+    markLastMessageAsAcknowledged: this.markLastMessageAsAcknowledged,
+  } as WebsocketContextActions
 
   handleMessage = (msg: WebsocketMessage) => {
     console.log('yes')
     console.log(msg)
-    this.setState({value: msg})
+    this.setState({lastMessage: {...msg, acknowledged: false}})
   }
 
   render() {
     return (
-      <Context.Provider value={this.state}>
+      <Context.Provider value={{state: this.state, actions: this.actions}}>
         {this.props.children}
       </Context.Provider>
     )

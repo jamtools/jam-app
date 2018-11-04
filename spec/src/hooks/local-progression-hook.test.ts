@@ -4,7 +4,7 @@ import * as mocha from 'mocha'
 import chai from 'chai'
 
 import * as ProgressionHook from '../../../src/hooks/local-progression-hook'
-import { Chord } from '../../../src/model-interfaces';
+import { Chord } from '../../../src/model-interfaces'
 
 const createChord = (): Chord => {
   return {
@@ -34,7 +34,8 @@ describe('ProgressionHook', () => {
   })
 
   it('should add a chord to the progression', () => {
-    const hook = ProgressionHook.useProgressionHook({chords: []}, {useState})
+    const useContext = () => ({state: {}, actions: {sendMessage: sinon.spy()}})
+    const hook = ProgressionHook.useProgressionHook({chords: []}, {useState, useContext})
     expect(hook[0]).to.deep.equal(state)
     expect(setState).not.to.have.been.called
 

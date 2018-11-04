@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import classnames from 'classnames'
 
 import { Piano as ReactPiano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 
-import PianoKeyProcessorContext from '../contexts/piano-key-processor-context'
+import PianoKeyProcessorContext, { PianoKeyProcessorContextValue } from '../contexts/piano-key-processor-context'
 
 // CSS styles are required in order to render piano correctly. Importing CSS requires
 // a CSS loader. Alternatively, copy the CSS file directly from src/styles.css into your <head>.
@@ -28,50 +28,39 @@ type PianoState = {
 
 const notes: MidiNumber[] = []
 
-class Piano extends React.PureComponent<any, PianoState> {
-  state: PianoState = {
-    heldDownNotes: [],
-  }
+export default function Piano(props) {
+  const {state: pianoKeyProcessorState, actions: pianoKeyProcessorActions} = useContext(PianoKeyProcessorContext) as PianoKeyProcessorContextValue
 
-  constructor(props: any) {
-    super(props)
-    window.setNotes = this.setNotes
-  }
+    // window.setNotes = this.setNotes
 
-  setNotes = (heldDownNotes: MidiNumber[]) => {
-    this.setState({heldDownNotes})
-  }
+  // setNotes = (heldDownNotes: MidiNumber[]) => {
+  //   this.setState({heldDownNotes})
+  // }
 
-  render() {
-    const {heldDownNotes} = this.props
-    const heldNumbers = heldDownNotes.map(n => n.number - 24)
+  const {heldDownNotes} = props
+  const heldNumbers = heldDownNotes.map((note: Note) => note.number - 24)
 
-    return (
-      <div style={{height: '300px'}}>
-        <ReactPiano
-          noteRange={{ first: firstNote, last: lastNote }}
-          playNote={(midiNumber: number) => {
-            console.log(midiNumber)
-          }}
-          stopNote={(midiNumber: number) => {
-          }}
-          width={1000}
-          keyboardShortcuts={keyboardShortcuts}
-          playbackNotes={heldNumbers}
-        />
-        <div>
-          {heldNumbers.map((midiNumber: MidiNumber) => (
-            <span key={midiNumber}>
-              {midiNumber}
-              <pre>
-              {JSON.stringify(MidiNumbers.getAttributes(midiNumber, null, 2))}
-              </pre>
-            </span>
-          ))}
-        </div>
+  return (
+    <div style={{height: '300px'}}>
+      <ReactPiano
+        noteRange={{ first: firstNote, last: lastNote }}
+        playNote={pianoKeyProcessorActions.pressedKey}
+        stopNote={(midiNumber: number) => {
+        }}
+        width={1000}
+        keyboardShortcuts={keyboardShortcuts}
+        playbackNotes={heldNumbers}
+      />
+      <div>
+        {heldNumbers.map((midiNumber: MidiNumber) => (
+          <span key={midiNumber}>
+            {midiNumber}
+            <pre>
+            {JSON.stringify(MidiNumbers.getAttributes(midiNumber, null, 2))}
+            </pre>
+          </span>
+        ))}
       </div>
-    )
-  }
+    </div>
+  )
 }
-
-export default Piano

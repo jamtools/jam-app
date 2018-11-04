@@ -5,14 +5,17 @@ import * as mocha from 'mocha'
 import chai from 'chai'
 
 import ProgressionContext, {ProgressionProvider, ProgressionContextValue} from '../../../src/contexts/progression-context'
+import {WebsocketProvider} from '../../../src/contexts/websocket-context'
 
 const makeComponent = (props, children) => {
   return TestRenderer.create(
-    <ProgressionProvider {...props}>
-      <ProgressionContext.Consumer>
-        {children}
-      </ProgressionContext.Consumer>
-    </ProgressionProvider>
+    <WebsocketProvider>
+      <ProgressionProvider {...props}>
+        <ProgressionContext.Consumer>
+          {children}
+        </ProgressionContext.Consumer>
+      </ProgressionProvider>
+    </WebsocketProvider>
   )
 }
 

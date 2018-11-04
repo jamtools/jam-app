@@ -16,17 +16,19 @@ const ProgressionView = (props: Props) => {
     <div>
       <div>
       {progressionState.chords.map((chord: Chord, i: number) => (
-        <div key={i}>
+        <span key={i}>
           {chord.notes.map((note, j: number) => (
-            <h1 key={j} className={styles.chordName}>{note.name}</h1>
+            <span key={j} className={styles.chordName}>
+              {note.name}
+            </span>
           ))}
-        </div>
+        </span>
       ))}
       </div>
       <h1 className={styles.heading}>
         {/* <button onClick={() => setProgressionState({l: 'k'})}>Press me</button> */}
         <pre>
-          {JSON.stringify(progressionState, null, 2)}
+          {JSON.stringify(progressionState.chords.map(chord => chord.notes[0].name), null, 2)}
         </pre>
       </h1>
     </div>
