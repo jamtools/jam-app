@@ -1,8 +1,9 @@
 image: "node:latest"
-# stages:
-  # - test
-  # - build
-  # - deploy
+stages:
+  - test
+  - build
+  - deploy
+  # - cleanup
 
 variables:
   AWS_DEFAULT_REGION: us-east-1
@@ -51,6 +52,7 @@ deploys3:
 
 clean_s3:
   image: "python:latest"
+  stage: cleanup
   before_script:
     - pip install awscli
   script:
