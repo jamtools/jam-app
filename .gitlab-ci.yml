@@ -19,7 +19,8 @@ test_frontend:
     - yarn test
   only:
     - /^qa-build.*$/
-    - branches
+  except:
+
 
 # build_frontend:  # A job to build the static website - replace it with your build methods
 #   stage: build
