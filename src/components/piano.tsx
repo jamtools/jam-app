@@ -1,10 +1,13 @@
 import React from 'react'
+import classnames from 'classnames'
 
 import { Piano as ReactPiano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 
+import PianoKeyProcessorContext from '../contexts/piano-key-processor-context'
+
 // CSS styles are required in order to render piano correctly. Importing CSS requires
 // a CSS loader. Alternatively, copy the CSS file directly from src/styles.css into your <head>.
-import 'react-piano/build/styles.css';
+import 'react-piano/dist/styles.css';
 
 const firstNote = MidiNumbers.fromNote('c3');
 const lastNote = MidiNumbers.fromNote('g6');
@@ -41,16 +44,16 @@ class Piano extends React.PureComponent<any, PianoState> {
 
   render() {
     const {heldDownNotes} = this.props
-    debugger
     const heldNumbers = heldDownNotes.map(n => n.number - 24)
 
     return (
-      <div>
+      <div style={{height: '300px'}}>
         <ReactPiano
           noteRange={{ first: firstNote, last: lastNote }}
-          onPlayNote={(midiNumber: number) => {
+          playNote={(midiNumber: number) => {
+            console.log(midiNumber)
           }}
-          onStopNote={(midiNumber: number) => {
+          stopNote={(midiNumber: number) => {
           }}
           width={1000}
           keyboardShortcuts={keyboardShortcuts}

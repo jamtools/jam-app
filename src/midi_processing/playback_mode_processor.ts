@@ -22,6 +22,7 @@ export default class PlaybackModeProcessor implements ApplicationModeProcessor {
   }
 
   playChord() {
+    debugger
     this.output.playChord(this.currentChord)
   }
 
@@ -31,7 +32,6 @@ export default class PlaybackModeProcessor implements ApplicationModeProcessor {
 
   gotoNextChord(): void {
     if (!(this.chords.length && this.currentChord)) return
-
     const index = this.chords.indexOf(this.currentChord)
     const newIndex = (index + 1) % this.chords.length
     this.currentChord = this.chords[newIndex]

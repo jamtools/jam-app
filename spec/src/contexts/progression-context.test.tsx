@@ -4,7 +4,17 @@ import sinon from 'sinon'
 import * as mocha from 'mocha'
 import chai from 'chai'
 
-import ProgressionContext from '../../../src/contexts/progression-context'
+import ProgressionContext, {ProgressionProvider, ProgressionContextValue} from '../../../src/contexts/progression-context'
+
+const makeComponent = (props, children) => {
+  return TestRenderer.create(
+    <ProgressionProvider {...props}>
+      <ProgressionContext.Consumer>
+        {children}
+      </ProgressionContext.Consumer>
+    </ProgressionProvider>
+  )
+}
 
 const expect = chai.expect
 describe('ProgressionContext', () => {
@@ -12,24 +22,29 @@ describe('ProgressionContext', () => {
   beforeEach(() => {
   })
 
-  it('it should return new state when updated', () => {
+  it('sets initial state', () => {
     const children = sinon.spy()
     const props = {
-      value: {yo: 'hey'},
+      chords: [],
     }
-    const component = TestRenderer.create(
-      <ProgressionContext.Provider {...props}>
-        <ProgressionContext.Consumer>
-          {children}
-        </ProgressionContext.Consumer>
-      </ProgressionContext.Provider>
-    )
+    const component = makeComponent(props, children)
 
-    const args = children.args[0][0]
-    expect(args.state).to.deep.equal({yo: 'hey'})
+    const firstRender = children.args[0][0] as ProgressionContextValue
+    const action = firstRender.actions.addChordToProgression
 
-    args.setState({yo2: 'ya dude'})
-    expect(children.args[1][0].state).to.deep.equal({yo2: 'ya dude'})
-    expect(children).to.have.been.called
+    const note = {
+      number: 84,
+      name: 'C',
+      octave: 5,
+    }
+    const chord = {notes: [note]}
+    action(chord)
+
+    const secondRender = children.args[1][0] as ProgressionContextValue
+    expect(secondRender.state).to.deep.equal({chords: [chord]})
+
+    // args.setState({yo2: 'ya dude'})
+    // expect(children.args[1][0].state).to.deep.equal({progressionState: {yo2: 'ya dude'}})
+    // expect(children).to.have.been.called
   })
 })

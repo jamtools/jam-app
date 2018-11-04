@@ -1,24 +1,37 @@
-import React, {createContext, createElement, useState} from 'react'
+import React, {useState, useContext} from 'react'
 
-const Context = React.createContext({})
-const Provider = Context.Provider
+import WebsocketContext from './websocket-context'
+import {useProgressionHook, ProgressionHookState, ProgressionHookActions} from '../hooks/local-progression-hook'
 
 type Props = {
-  value?: object,
-  children: React.ReactChildren,
+  value?: ProgressionHookState,
+  children: React.ReactNode
 }
 
-const ProgressionProvider = (props: Props) => {
-  const [state, setState] = useState(props.value || {dude: 'yop'})
+export type ProgressionContextValue = {
+  state: ProgressionHookState,
+  actions: ProgressionHookActions,
+}
+
+const Context = React.createContext({})
+
+export function ProgressionProvider(props: Props) {
+  const [progressionState, actions] = useProgressionHook(props.value, {useState})
+
+  const websocketState = useContext(WebsocketContext)
+
+  const state = {
+    ...(websocketState && websocketState.value),
+    ...progressionState,
+  }
+
+  console.log(state)
 
   return (
-    <Context.Provider value={{state, setState}}>
+    <Context.Provider value={{state, actions}}>
       {props.children}
     </Context.Provider>
   )
 }
 
-export default {
-  Consumer: Context.Consumer,
-  Provider: ProgressionProvider,
-} as any
+export default Context

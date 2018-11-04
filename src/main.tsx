@@ -1,11 +1,12 @@
 import React from 'react'
+
+import {Chord, Note} from './model-interfaces'
 import MidiAndAudioContainer from './components/midi_and_audio_container'
 import Piano from './components/piano'
 import {InputDevice, OutputDevice} from './midi_devices/interfaces'
 import ProgressionView from './components/progression_view/progression_view'
-import ProgressionContext from './contexts/progression-context'
-
-const ProgressionProvider = ProgressionContext.Provider
+import ProgressionContext, {ProgressionProvider} from './contexts/progression-context'
+import WebsockerContext, {WebsocketProvider} from './contexts/websocket-context'
 
 interface MainState {
   inputs: Array<InputDevice>
@@ -32,13 +33,19 @@ export class Main extends React.PureComponent {
     const {heldDownNotes} = this.state
 
     return (
-      <ProgressionContext.Provider>
-        <div>
-          {/* <Piano heldDownNotes={heldDownNotes} /> */}
-          <ProgressionView />
-          {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
-        </div>
-      </ProgressionContext.Provider>
+      <WebsocketProvider>
+        <ProgressionProvider value={{chords: [{notes: [{
+          "name": "C",
+          "number": 84,
+          "octave": 5,
+        }]}]}}>
+          <div>
+            <Piano heldDownNotes={heldDownNotes} />
+            <ProgressionView />
+            {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
+          </div>
+        </ProgressionProvider>
+      </WebsocketProvider>
     )
   }
 }
