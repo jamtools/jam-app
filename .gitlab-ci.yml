@@ -50,17 +50,17 @@ deploys3:
     # on_stop: clean_s3
   when: manual
 
-clean_s3:
-  image: "python:latest"
-  stage: cleanup
-  before_script:
-    - pip install awscli
-  script:
-    - aws s3 rm s3://${BUCKET_NAME}/${CI_COMMIT_REF_SLUG} --recursive # Replace example-bucket with your bucket
-  environment:
-    name: ${CI_COMMIT_REF_SLUG}
-    action: stop
-  when: manual
+# clean_s3:
+#   image: "python:latest"
+#   stage: cleanup
+#   before_script:
+#     - pip install awscli
+#   script:
+#     - aws s3 rm s3://${BUCKET_NAME}/${CI_COMMIT_REF_SLUG} --recursive # Replace example-bucket with your bucket
+#   environment:
+#     name: ${CI_COMMIT_REF_SLUG}
+#     action: stop
+#   when: manual
 
 qa_deploy:
   extends: deploys3
