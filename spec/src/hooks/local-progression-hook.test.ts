@@ -42,6 +42,22 @@ describe('ProgressionHook', () => {
     const chord = createChord()
     hook[1].addChordToProgression(chord)
     expect(setState).to.have.been.called
-    expect(returnedState).to.deep.equal({chords: [chord]})
+    expect(returnedState).to.deep.equal({chords: [chord], initialized: true})
+  })
+
+  it('should update its chords when an updateProgression websocket message comes in', () => {
+    const ioOnSpy = sinon.spy()
+    const socket = {on: ioOnSpy}
+    const useContext = () => ({state: {socket}, actions: {}})
+
+    const hook = ProgressionHook.useProgressionHook({chords: []}, {useState, useContext})
+    const socketCallback = ioOnSpy.args[0][1] as any
+    console.log(ioOnSpy.args)
+
+    const chord = createChord()
+    socketCallback({type: 'updateProgression', data: [chord]})
+
+    expect(setState).to.have.been.called
+    expect(returnedState).to.deep.equal({chords: [chord], initialized: true})
   })
 })

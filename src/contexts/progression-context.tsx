@@ -25,8 +25,6 @@ export function ProgressionProvider(props: Props) {
     ...progressionState,
   }
 
-  console.log(state)
-
   return (
     <Context.Provider value={{state, actions} as ProgressionContextValue}>
       {props.children}

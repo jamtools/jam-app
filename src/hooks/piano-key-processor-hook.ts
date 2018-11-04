@@ -42,7 +42,6 @@ export function pressedKey(midiNumber: number, state: PianoKeyProcessorHookState
       }
     ]
   }
-  console.log(note)
 
   progressionActions.addChordToProgression(newChord)
 }

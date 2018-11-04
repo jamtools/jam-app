@@ -50,15 +50,15 @@ function listener()
 
 let inititalized = false
 function initWebsocketListener(websocketContext: WebsocketContextValue, state: ProgressionHookState, actions: ProgressionHookActions) {
-  if (inititalized) {
+  if (state.initialized) {
     return
   }
-  inititalized = true
+  state.initialized = true
 
   if (websocketContext.state.socket) {
     websocketContext.state.socket.on('message', (msg: WebsocketMessage) => {
       if (isProgressionMessage(msg)) {
-        websocketContext.actions.markLastMessageAsAcknowledged()
+        // websocketContext.actions.markLastMessageAsAcknowledged()
         actions[msg.type](msg.data)
       }
     })

@@ -10,7 +10,6 @@ type Props = {
 
 const ProgressionView = (props: Props) => {
   const {state: progressionState, actions: setProgressionActions} = useContext(ProgressionContext)
-  console.log(progressionState)
 
   return (
     <div>

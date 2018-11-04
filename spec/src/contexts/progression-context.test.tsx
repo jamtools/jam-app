@@ -44,10 +44,6 @@ describe('ProgressionContext', () => {
     action(chord)
 
     const secondRender = children.args[1][0] as ProgressionContextValue
-    expect(secondRender.state).to.deep.equal({chords: [chord]})
-
-    // args.setState({yo2: 'ya dude'})
-    // expect(children.args[1][0].state).to.deep.equal({progressionState: {yo2: 'ya dude'}})
-    // expect(children).to.have.been.called
+    expect(secondRender.state).to.deep.equal({chords: [chord], initialized: true})
   })
 })

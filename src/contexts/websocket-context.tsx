@@ -57,8 +57,6 @@ export class WebsocketProvider extends React.PureComponent<any, WebsocketState> 
   } as WebsocketContextActions
 
   handleMessage = (msg: WebsocketMessage) => {
-    console.log('yes')
-    console.log(msg)
     this.setState({lastMessage: {...msg, acknowledged: false}})
   }
 
