@@ -35,7 +35,7 @@ build_frontend:
     paths:
       - dist/
 
-.deploys3:
+deploys3:
   image: "python:latest"  # We use python because there is a well-working AWS Sdk
   stage: deploy
   dependencies:
