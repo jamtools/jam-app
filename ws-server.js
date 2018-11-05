@@ -14,9 +14,9 @@ app.use(bodyParser())
 io.on('connection', (socket) => {
   console.log('yup')
   socket.join('jam')
-  setTimeout(() => {
-    socket.emit('message', {text: 'hey'})
-  }, 1000)
+  // setTimeout(() => {
+  //   socket.emit('message', {text: 'hey'})
+  // }, 1000)
   socket.on('message', (data) => {
     console.log(JSON.stringify(data, null, 3))
     socket.to('jam').emit('message', data)

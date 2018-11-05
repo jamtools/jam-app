@@ -40,5 +40,3 @@ export interface WebMidiOutput {
 export interface MidiInitializer {
 
 }
-
-export interface

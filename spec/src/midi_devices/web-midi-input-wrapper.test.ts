@@ -17,10 +17,12 @@ describe('WebMidiInputWrapper', () => {
 
     const noteToSend = {number: 84, name: 'C', octave: 4}
 
+    expect(this.input.getCurrentlyHeldDownNotes().length).to.equal(0)
+
     this.mockMidiInput.sendNoteOn(noteToSend)
-    console.log(this.input.getCurrentlyHeldDownNotes())
     expect(this.input.getCurrentlyHeldDownNotes().length).to.equal(1)
     expect(this.input.getCurrentlyHeldDownNotes()[0]).to.equal(noteToSend)
+
     this.mockMidiInput.sendNoteOff(noteToSend)
     expect(this.input.getCurrentlyHeldDownNotes().length).to.equal(0)
   })
