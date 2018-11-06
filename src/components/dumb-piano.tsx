@@ -46,7 +46,6 @@ export default function DumbPiano(props) {
     ls.push(getMeaningfulNote(heldDownNotes[0]))
   }
   console.log(ls)
-  debugger
 
   return (
     <div style={{height: props.height || '300px'}}>

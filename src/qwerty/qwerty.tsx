@@ -1,42 +1,42 @@
 import React, {Component} from 'react'
-import {withStyles} from 'material-ui/styles'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-// import * from as $ from 'jquery'
 
-import { sendChordKeyPress, sendControlKeyPress } from './actions'
+// import { sendChordKeyPress, sendControlKeyPress } from './actions'
 
 type State = {
   keysHeld: any[]
 }
 
-export class Qwerty extends Component<{}, State> {
+type Props = {
+  mappedKeys: any,
+}
+
+export class Qwerty extends Component<Props, State> {
   static propTypes = {
   }
 
   state = {
-    keysHeld: [],
+    keysHeld: [] as any[],
   }
 
   componentDidMount() {
-    $(document).on('keydown', this.handleKeyDown)
-    $(document).on('keyup', this.handleKeyUp)
+    document.addEventListener('keydown', this.handleKeyDown)
+    document.addEventListener('keyup', this.handleKeyUp)
   }
 
   componentWillUnmount() {
-    $(document).off('keydown')
-    $(document).off('keyup')
+    document.removeEventListener('keydown', this.handleKeyDown)
+    document.removeEventListener('keyup', this.handleKeyUp)
   }
 
-  setKeysHeld = (ls) => {
+  setKeysHeld = (ls: any[]) => {
 
   }
 
-  isKeyCurrentlyHeld = (key) => {
-    return this.state.keysHeld.includes(key)
+  isKeyCurrentlyHeld = (key: any) => {
+    return this.state.keysHeld.indexOf(key) !== -1
   }
 
-  handleKeyUp = (e) => {
+  handleKeyUp = (e: KeyboardEvent) => {
     const {key} = e
     if(!this.isKeyCurrentlyHeld(key)) {
       return
@@ -47,7 +47,7 @@ export class Qwerty extends Component<{}, State> {
     this.setState({keysHeld: ls})
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     const {key} = e
     if(this.isKeyCurrentlyHeld(key)) {
       return
@@ -59,7 +59,7 @@ export class Qwerty extends Component<{}, State> {
 
     const {mappedKeys} = this.props
 
-    if(Object.keys(mappedKeys).includes(key)) {
+    if(Object.keys(mappedKeys).indexOf(key) !== -1) {
       return mappedKeys[key]()
     }
   }

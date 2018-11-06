@@ -1,26 +1,6 @@
 import { Chord } from '../model-interfaces'
 import WebsocketContext, { WebsocketContextValue, WebsocketMessage } from '../contexts/websocket-context'
-
-export interface ProgressionHookState {
-  chords: Chord[],
-}
-
-export interface ProgressionHookActions {
-  addChordToProgression: (chord: Chord) => void
-}
-
-export type ProgressionHookValue = [ProgressionHookState, ProgressionHookActions]
-
-const defaultState = {
-  chords: [] as Chord[],
-}
-
-type callbackType = (state: ProgressionHookState) => ProgressionHookState
-type withCallback = (cb: callbackType) => void
-
-type Contexts = {
-  websocketContext: WebsocketContextValue
-}
+import { ProgressionHookState, ProgressionHookActions, Contexts, defaultState, withCallback } from './local-progression-hook.types';
 
 function addChordToProgression(chord: Chord, state: ProgressionHookState, contexts: Contexts): ProgressionHookState {
   const websocketContext = contexts.websocketContext
@@ -46,9 +26,6 @@ function updateProgression(chords: Chord[], state: ProgressionHookState): Progre
   }
 }
 
-function listener()
-
-let inititalized = false
 function initWebsocketListener(websocketContext: WebsocketContextValue, state: ProgressionHookState, actions: ProgressionHookActions) {
   if (state.initialized) {
     return
