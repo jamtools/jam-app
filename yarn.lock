@@ -5642,9 +5642,9 @@ react-overlays@^0.8.0:
     react-transition-group "^2.2.0"
     warning "^3.0.0"
 
-react-piano@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/react-piano/-/react-piano-3.1.1.tgz#2a1d146b5275f9ce660388ec693b9e5ec3f0ee7e"
+react-piano@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/react-piano/-/react-piano-3.1.2.tgz#996e6533033e777ff26777c5447c22003834397f"
   dependencies:
     classnames "^2.2.6"
     just-range "^2.1.0"

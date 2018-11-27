@@ -30,7 +30,7 @@
     "react": "^16.7.0-alpha.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.7.0-alpha.0",
-    "react-piano": "^3.1.1",
+    "react-piano": "^3.1.2",
     "reactdom": "^2.0.0",
     "rx": "^4.1.0",
     "rxjs": "^6.2.0",

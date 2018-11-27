@@ -1,5 +1,0 @@
-{
-  "rootDir": "src",
-  "setupTestFrameworkScriptFile": "<rootDir>/setupTests.js",
-  "coverageDirectory": "<rootDir>/../coverage"
-}
