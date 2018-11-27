@@ -1,3 +1,6 @@
+// Copyright (c) 2018-present Kochell Software. All Rights Reserved.
+// See LICENSE.txt for license information.
+
 export interface IStringTMap<T> { [key: string]: T }
 export interface INumberTMap<T> { [key: number]: T }
 

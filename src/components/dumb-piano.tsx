@@ -1,8 +1,6 @@
 import React, {useContext} from 'react'
-import classnames from 'classnames'
 
-import { KeyboardShortcuts, MidiNumbers } from 'react-piano'
-import ReactPiano from '../react-piano/src/Piano';
+import { KeyboardShortcuts, MidiNumbers, Piano as ReactPiano } from 'react-piano'
 
 import 'react-piano/dist/styles.css';
 
@@ -46,7 +44,6 @@ export default function DumbPiano(props) {
     ls.push(getMeaningfulNote(heldDownNotes[0]))
   }
   console.log(ls)
-  debugger
 
   return (
     <div style={{height: props.height || '300px'}}>
