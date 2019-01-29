@@ -1,5 +1,3 @@
-import {useState} from 'react'
-
 export type WebsocketMessage = {
   type: string,
   data: any,
@@ -43,10 +41,10 @@ function handleMessage(msg: WebsocketMessage, setState: any) {
   setState({lastMessage: {...msg, acknowledged: false}})
 }
 
-export function useWebsocketHook(initialValue: WebsocketHookState): [WebsocketHookState, WebsocketHookActions] {
-  const [state, setState] = useState(initialValue)
+export function useWebsocketHook(initialValue: WebsocketHookState, hooks: any): [WebsocketHookState, WebsocketHookActions] {
+  const [state, setState] = hooks.useState(initialValue)
 
-  const [intialized, setInitialized] = useState(false)
+  const [intialized, setInitialized] = hooks.useState(false)
   if(!intialized) {
     state.socket.on('message', (msg: WebsocketMessage) => handleMessage(msg, setState))
     setInitialized(true)
@@ -57,7 +55,9 @@ export function useWebsocketHook(initialValue: WebsocketHookState): [WebsocketHo
       sendMessage(message, newState)
       return newState
     }),
-    markLastMessageAsAcknowledged: markLastMessageAsAcknowledged,
+    markLastMessageAsAcknowledged: () => (setState as any)((newState: WebsocketHookState) => {
+      return markLastMessageAsAcknowledged(newState)
+    }),
   } as WebsocketHookActions
 
   return [state, actions]

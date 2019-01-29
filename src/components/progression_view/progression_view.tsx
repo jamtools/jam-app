@@ -1,9 +1,9 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {Button, ButtonGroup} from 'react-bootstrap'
+import {useStore} from 'easy-peasy'
 
 import styles from './progression_view.scss'
-import ProgressionContext, { ProgressionContextValue } from '../../contexts/progression-context'
-import { Chord } from '../../model-interfaces'
+import { Chord, Note } from '../../model-interfaces'
 import DumbPiano from '../dumb-piano'
 
 type Props = {
@@ -11,16 +11,16 @@ type Props = {
 }
 
 const ProgressionView = (props: Props) => {
-  const {state: progressionState, actions: setProgressionActions} = useContext(ProgressionContext) as ProgressionContextValue
+  const chords: Chord[] = useStore(state => state.progressions.chords)
 
-  if (!progressionState || !progressionState.chords) {
+  if (!chords) {
     return <h1>No progression</h1>
   }
 
-  const createButton = (chord, i) => {
+  const createButton = (chord: Chord, i: number) => {
     return (
       <Button bsStyle='primary' key={i}>
-        {chord.notes.map((note, j: number) => (
+        {chord.notes.map((note: Note, j: number) => (
           <span key={j} className={styles.chordName}>
             {note.name}
           </span>
@@ -32,7 +32,7 @@ const ProgressionView = (props: Props) => {
   return (
     <div>
       <ButtonGroup>
-        {progressionState.chords.map((chord: Chord, i: number) => (
+        {chords.map((chord: Chord, i: number) => (
           <div style={{display: 'inline-block'}}>
             <DumbPiano
               height='100px'
@@ -47,9 +47,8 @@ const ProgressionView = (props: Props) => {
         ))}
       </ButtonGroup>
       <h1 className={styles.heading}>
-        {/* <button onClick={() => setProgressionState({l: 'k'})}>Press me</button> */}
         <pre>
-          {JSON.stringify(progressionState.chords.map(chord => chord.notes[0].name), null, 2)}
+          {JSON.stringify(chords.map(chord => chord.notes[0].name), null, 2)}
         </pre>
       </h1>
     </div>
