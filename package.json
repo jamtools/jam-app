@@ -9,7 +9,7 @@
     "mocha": "./node_modules/.bin/mocha",
     "test": "yarn test-match spec/src/**/*.test.ts*",
     "test-match": "yarn ts-mocha -p tsconfig.json --require spec/index.ts --exit",
-    "check-ts": "tsc --outDir /dev/null --noEmit"
+    "check-ts": "./node_modules/.bin/tsc --outDir /dev/null --noEmit --jsx react --esModuleInterop -p tsconfig.json"
   },
   "repository": "git@github.com:mickmister/midi-jam-helper.git",
   "author": "mickmister <mjkochell@gmail.com>",

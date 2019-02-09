@@ -34,7 +34,7 @@ const ProgressionView = (props: Props) => {
     <div>
       <ButtonGroup>
         {chords.map((chord: Chord, i: number) => (
-          <div style={{display: 'inline-block'}}>
+          <div key={i} style={{display: 'inline-block'}}>
             <DumbPiano
               height='100px'
               playNote={() => console.log('special')}

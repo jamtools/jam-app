@@ -6,7 +6,7 @@ import Piano from './components/piano'
 import {InputDevice, OutputDevice} from './types/interfaces'
 import ProgressionView from './components/progression_view/progression_view'
 import store, {StoreInit} from './store/store'
-import MidiAndAudioContainer from '../temp/midi_and_audio_container'
+// import MidiAndAudioContainer from '../temp/midi_and_audio_container'
 
 interface MainState {
   inputs: InputDevice[],
