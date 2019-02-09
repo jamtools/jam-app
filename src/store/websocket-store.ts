@@ -32,7 +32,9 @@ export const WebsocketStore: IWebsocketStore = {
   }),
   sendMessage: thunk((actions, message: WebsocketMessage, {getState}) => {
     const socket = getState().websocket.socket as any
-    socket.send(message)
+    if (socket) {
+      socket.send(message)
+    }
   }),
   handleMessage: thunk((_, message: WebsocketMessage, {dispatch}) => {
     const actions = {

@@ -21,15 +21,15 @@ const ProgressionStore: IProgressionStore = {
     })
   }),
   chords: [
-    {
-      notes: [
-        {
-          number: 84,
-          name: 'C',
-          octave: 5,
-        },
-      ],
-    },
+    // {
+    //   notes: [
+    //     {
+    //       number: 84,
+    //       name: 'C',
+    //       octave: 5,
+    //     },
+    //   ],
+    // },
   ] as Chord[],
 }
 

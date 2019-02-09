@@ -33,18 +33,20 @@ const ProgressionView = (props: Props) => {
   }
 
   return (
-    groups.map((group: Chord[]) => (
-      <div className={styles.progressionContainer}>
-        {group.map((chord: Chord, i: number) => (
-          <ChordComponent chord={chord} key={i} />
-        ))}
-        {/* <h1 className={styles.heading}>
-          <pre>
-          {JSON.stringify(chords.map(chord => chord.notes[0].name), null, 2)}
-          </pre>
-        </h1> */}
-      </div>
-    ))
+    <React.Fragment>
+      {groups.map((group: Chord[]) => (
+        <div className={styles.progressionContainer}>
+          {group.map((chord: Chord, i: number) => (
+            <ChordComponent chord={chord} key={i} />
+          ))}
+          {/* <h1 className={styles.heading}>
+            <pre>
+            {JSON.stringify(chords.map(chord => chord.notes[0].name), null, 2)}
+            </pre>
+          </h1> */}
+        </div>
+      ))}
+    </React.Fragment>
   )
 }
 
