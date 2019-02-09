@@ -32,6 +32,7 @@ build_frontend:
   only:
     - /^issue-.*$/
     - /^qa-build.*$/
+    - /^prod-build.*$/
     - master
   artifacts:
     paths:
