@@ -56,7 +56,7 @@ export default function DumbPiano(props: Props) {
   console.log(ls)
 
   return (
-    <div style={{height: props.height || '300px'}}>
+    <div style={{height: props.height || '240px'}}>
       <ReactPiano
         height={'300px'}
         width={props.width || 1000}
