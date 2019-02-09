@@ -1,58 +1,52 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {Button, ButtonGroup} from 'react-bootstrap'
+import {useStore, State} from 'easy-peasy'
 
 import styles from './progression_view.scss'
-import ProgressionContext, { ProgressionContextValue } from '../../contexts/progression-context'
-import { Chord } from '../../model-interfaces'
+import { Chord, Note } from '../../types/model-interfaces'
 import DumbPiano from '../dumb-piano'
+import { IGlobalStore } from '../../store/store-types'
+
+import ChordComponent from './chord'
 
 type Props = {
 
 }
 
-const ProgressionView = (props: Props) => {
-  const {state: progressionState, actions: setProgressionActions} = useContext(ProgressionContext) as ProgressionContextValue
+const getGroupsOfChords = (chords: Chord[]) => {
+  const copy = [...chords]
+  const result = []
 
-  if (!progressionState || !progressionState.chords) {
+  while (copy.length) {
+    result.push( copy.splice(0, 4) )
+  }
+  return result;
+}
+
+const ProgressionView = (props: Props) => {
+  const chords: Chord[] = useStore((state: State<IGlobalStore>) => state.progressions.chords)
+
+  const groups = getGroupsOfChords(chords)
+
+  if (!chords) {
     return <h1>No progression</h1>
   }
 
-  const createButton = (chord, i) => {
-    return (
-      <Button bsStyle='primary' key={i}>
-        {chord.notes.map((note, j: number) => (
-          <span key={j} className={styles.chordName}>
-            {note.name}
-          </span>
-        ))}
-      </Button>
-    )
-  }
-
   return (
-    <div>
-      <ButtonGroup>
-        {progressionState.chords.map((chord: Chord, i: number) => (
-          <div style={{display: 'inline-block'}}>
-            <DumbPiano
-              height='100px'
-              playNote={() => console.log('special')}
-              // noteRange={{ first: firstNote, last: lastNote }}
-              width={200}
-              // keyboardShortcuts={keyboardShortcuts}
-              heldDownNotes={chord.notes}
-            />
-            {createButton(chord, 3)}
-          </div>
-        ))}
-      </ButtonGroup>
-      <h1 className={styles.heading}>
-        {/* <button onClick={() => setProgressionState({l: 'k'})}>Press me</button> */}
-        <pre>
-          {JSON.stringify(progressionState.chords.map(chord => chord.notes[0].name), null, 2)}
-        </pre>
-      </h1>
-    </div>
+    <React.Fragment>
+      {groups.map((group: Chord[]) => (
+        <div className={styles.progressionContainer}>
+          {group.map((chord: Chord, i: number) => (
+            <ChordComponent chord={chord} key={i} />
+          ))}
+          {/* <h1 className={styles.heading}>
+            <pre>
+            {JSON.stringify(chords.map(chord => chord.notes[0].name), null, 2)}
+            </pre>
+          </h1> */}
+        </div>
+      ))}
+    </React.Fragment>
   )
 }
 

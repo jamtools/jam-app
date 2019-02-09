@@ -1,6 +1,6 @@
 import React from 'react'
-import {InputDevice} from '../midi_devices/interfaces'
-import {NoteCollection, Note} from '../model-interfaces'
+import {InputDevice} from '../types/interfaces'
+import {NoteCollection, Note} from '../types/model-interfaces'
 
 interface IProps {
   input: InputDevice

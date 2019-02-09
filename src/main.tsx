@@ -1,22 +1,21 @@
 import React from 'react'
+import {StoreProvider} from 'easy-peasy'
 
-import {Chord, Note} from './model-interfaces'
-import MidiAndAudioContainer from './components/midi_and_audio_container'
+import {Chord, Note} from './types/model-interfaces'
 import Piano from './components/piano'
-import {InputDevice, OutputDevice} from './midi_devices/interfaces'
+import {InputDevice, OutputDevice} from './types/interfaces'
 import ProgressionView from './components/progression_view/progression_view'
-import ProgressionContext, {ProgressionProvider} from './contexts/progression-context'
-import WebsockerContext, {WebsocketProvider} from './contexts/websocket-context'
-import {PianoKeyProcessorProvider} from './contexts/piano-key-processor-context'
+import store, {StoreInit} from './store/store'
+// import MidiAndAudioContainer from '../temp/midi_and_audio_container'
 
 interface MainState {
-  inputs: Array<InputDevice>
+  inputs: InputDevice[],
   activeInput: InputDevice
-  outputs: Array<OutputDevice>
+  outputs: OutputDevice[],
   activeOutput: OutputDevice
   currentMode: string
-  chords: Array<Chord>
-  heldDownNotes: Array<Note>
+  chords: Chord[],
+  heldDownNotes: Note[],
 }
 
 export class Main extends React.PureComponent {
@@ -34,21 +33,15 @@ export class Main extends React.PureComponent {
     const {heldDownNotes} = this.state
 
     return (
-      <WebsocketProvider>
-        <ProgressionProvider value={{chords: [{notes: [{
-          "name": "C",
-          "number": 84,
-          "octave": 5,
-        }]}]}}>
-          <PianoKeyProcessorProvider>
-            <div>
-              <Piano heldDownNotes={heldDownNotes} />
-              <ProgressionView />
-              {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
-            </div>
-          </PianoKeyProcessorProvider>
-        </ProgressionProvider>
-      </WebsocketProvider>
+      <StoreProvider store={store}>
+        <StoreInit>
+          <div>
+            <Piano heldDownNotes={heldDownNotes} />
+            <ProgressionView />
+            {/* <MidiAndAudioContainer {...this.state} setState={this.setState.bind(this)} /> */}
+          </div>
+        </StoreInit>
+      </StoreProvider>
     )
   }
 }

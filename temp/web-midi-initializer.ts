@@ -1,4 +1,3 @@
-
 export WebMidiInitializer
 WebMidi.enable((err: Error) => {
   if (err) {

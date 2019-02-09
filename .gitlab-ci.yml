@@ -17,9 +17,11 @@ test_frontend:
   stage: test
   script:
     - yarn install --pure-lockfile
+    - yarn check-ts
     - yarn test
   only:
     - /^issue-.*$/
+    - dev
     - master
 
 build_frontend:

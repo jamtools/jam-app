@@ -1,7 +1,7 @@
 import noteToFrequency from 'note-to-frequency'
 
-import {OutputDevice, OutputMessage} from '../interfaces'
-import {Chord, Note} from '../../model-interfaces'
+import {OutputDevice, OutputMessage} from '../../types/interfaces'
+import {Chord, Note} from '../../types/model-interfaces'
 
 export default class SoftwareSynthOutput implements OutputDevice {
 

@@ -9,7 +9,6 @@
     "jsx": "react",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "typeRoots" : ["./types"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "lib": [
@@ -20,5 +19,9 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
+  ],
+  "exclude": [
+    "./temp/*",
+    "./node_modules/*"
   ]
 }

@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs'
-import {InputDevice, InputMessage} from '../interfaces'
-import {Note} from '../../model-interfaces'
+import {InputDevice, InputMessage} from '../../types/interfaces'
+import {Note} from '../../types/model-interfaces'
 
 export default class ProgrammaticInput implements InputDevice {
   heldDownNotes: Array<Note> = []

@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs'
-import {Chord, Note} from '../model-interfaces'
+import {Chord, Note} from './model-interfaces'
 
 export interface InputMessage {
 
@@ -33,8 +33,9 @@ export interface WebMidiInput {
 }
 
 export interface WebMidiOutput {
-  playNote(note: any): void
-  stopNote(note: any): void
+  playNote(note: any): void,
+  stopNote(note: any): void,
+  name: string,
 }
 
 export interface MidiInitializer {
