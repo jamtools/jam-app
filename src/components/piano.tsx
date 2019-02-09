@@ -1,10 +1,11 @@
 import React from 'react'
-import {useAction} from 'easy-peasy'
+import {useAction, useActions, Actions} from 'easy-peasy'
 
 import { MidiNumbers } from 'react-piano';
 
-import {Note, MidiNumber} from '../model-interfaces'
+import {Note, MidiNumber} from '../types/model-interfaces'
 import DumbPiano from './dumb-piano'
+import { IGlobalStore } from '../store/store-types';
 
 type PianoState = {
   heldDownNotes: MidiNumber[],
@@ -12,14 +13,18 @@ type PianoState = {
 
 const notes: MidiNumber[] = []
 
-export default function Piano(props) {
+type Props = {
+  heldDownNotes: Note[],
+}
+
+export default function Piano(props: Props) {
     // window.setNotes = this.setNotes
 
   // setNotes = (heldDownNotes: MidiNumber[]) => {
   //   this.setState({heldDownNotes})
   // }
 
-  const pressedKey = useAction(dispatch => dispatch.pianoKeyProcessor.pressedKey)
+  const pressedKey = useActions((actions: Actions<IGlobalStore>) => actions.pianoKeyProcessor.pressedKey)
 
   const {heldDownNotes} = props
   const heldNumbers = heldDownNotes.map((note: Note) => note.number - 24)
@@ -35,7 +40,7 @@ export default function Piano(props) {
         }}
         width={1000}
         // keyboardShortcuts={keyboardShortcuts}
-        heldDownNotes={heldNumbers}
+        heldDownNotes={heldDownNotes}
       />
       <div>
         {heldNumbers.map((midiNumber: MidiNumber) => (

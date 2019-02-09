@@ -1,18 +1,21 @@
-import {effect} from 'easy-peasy'
+import {effect, thunk, Thunk} from 'easy-peasy'
 import {MidiNumbers} from 'react-piano'
+import { IGlobalStore } from './store-types';
 
 const fromNote =  MidiNumbers.fromNote
 const getNoteAttributes = MidiNumbers.getAttributes
 
-const PianoConfig: any = [{
+const PianoConfig = {
   getOctaveRole: (octave: number) => 'ROOT_CHOICE',
-}, {
-}]
+}
 
-const PianoKeyProcessor = {
-  pressedKey: effect(async (dispatch, midiNumber: number, getState) => {
-    const [pianoConfigSelectors, pianoConfigActions] = PianoConfig
-    const octaveRole = pianoConfigSelectors.getOctaveRole(midiNumber)
+export interface IPianoKeyProcessorStore {
+  pressedKey: Thunk<IPianoKeyProcessorStore, number, void, IGlobalStore>,
+}
+
+const PianoKeyProcessorStore: IPianoKeyProcessorStore = {
+  pressedKey: thunk(async (actions, midiNumber: number, {dispatch}) => {
+    const octaveRole = PianoConfig.getOctaveRole(midiNumber)
 
     const note = getNoteAttributes(midiNumber)
     const newChord = {
@@ -29,4 +32,4 @@ const PianoKeyProcessor = {
   }),
 }
 
-export default PianoKeyProcessor
+export default PianoKeyProcessorStore

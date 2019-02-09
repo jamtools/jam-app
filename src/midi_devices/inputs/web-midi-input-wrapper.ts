@@ -6,8 +6,8 @@ import {
   // InputMessage,
   WebMidiInput,
   MidiEvent,
-} from '../interfaces'
-import {Note} from '../../model-interfaces'
+} from '../../types/interfaces'
+import {Note} from '../../types/model-interfaces'
 
 export default class WebMidiInputWrapper implements InputDevice {
   heldDownNotes: Array<Note> = []

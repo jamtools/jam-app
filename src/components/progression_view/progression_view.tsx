@@ -1,17 +1,18 @@
 import React from 'react'
 import {Button, ButtonGroup} from 'react-bootstrap'
-import {useStore} from 'easy-peasy'
+import {useStore, State} from 'easy-peasy'
 
 import styles from './progression_view.scss'
-import { Chord, Note } from '../../model-interfaces'
+import { Chord, Note } from '../../types/model-interfaces'
 import DumbPiano from '../dumb-piano'
+import { IGlobalStore } from '../../store/store-types';
 
 type Props = {
 
 }
 
 const ProgressionView = (props: Props) => {
-  const chords: Chord[] = useStore(state => state.progressions.chords)
+  const chords: Chord[] = useStore((state: State<IGlobalStore>) => state.progressions.chords)
 
   if (!chords) {
     return <h1>No progression</h1>

@@ -1,20 +1,22 @@
-import axios from 'axios'
-import {useEffect} from 'react'
-import useReactRouter from 'use-react-router';
-import {createStore, useAction, useStore, effect} from 'easy-peasy'
+import {createStore, thunk, useActions, Actions} from 'easy-peasy'
 
-import LocalProgressionStore from './local-progression-store'
+import LocalProgressionStore from './progression-store'
 import PianoKeyProcessorStore from './piano-key-processor-store'
+import WebsocketStore from './websocket-store'
 
 import {initialState, saveState} from './persist-state'
+import { IGlobalStore } from './store-types'
+import { useEffect } from 'react';
 
-const store = createStore({
+const store = createStore<IGlobalStore>({
   progressions: LocalProgressionStore,
   pianoKeyProcessor: PianoKeyProcessorStore,
-  settings: {},
+  websocket: WebsocketStore,
+  // settings: {},
   store: {
-    init: effect((dispatch) => {
+    init: thunk((actions, _, {dispatch}) => {
       // dispatch.users.fetchUsers()
+      dispatch.websocket.init()
     }),
   },
 }, {
@@ -26,27 +28,10 @@ store.subscribe(() => {
 })
 
 export function StoreInit(props: {children: any}) {
-  // const {history, location} = useReactRouter()
-  const init = useAction(dispatch => dispatch.store.init)
-  // const token = useStore(state => state.auth.authToken)
-
-  // may want to make this more secure. another library could be using axios
-  // axios.defaults.headers.common['Authorization'] = token
-
-  // useEffect(() => {
-  //   if (location.pathname !== '/login') {
-  //     init()
-  //   }
-
-  //   axios.interceptors.response.use(response => {
-  //     return response;
-  //   }, error => {
-  //     if (error.response.status === 401) {
-  //       history.push('/login')
-  //     }
-  //     return error;
-  //   })
-  // }, [])
+  const init = useActions((actions: Actions<IGlobalStore>) => actions.store.init)
+  useEffect(() => {
+    init()
+  })
 
   return props.children
 }

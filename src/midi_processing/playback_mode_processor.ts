@@ -1,6 +1,6 @@
 import {IStringTMap} from '../util/interfaces'
-import {InputDevice, OutputDevice} from '../midi_devices/interfaces'
-import {Chord, Note} from '../model-interfaces'
+import {InputDevice, OutputDevice} from '../types/interfaces'
+import {Chord, Note} from '../types/model-interfaces'
 import {ApplicationModeProcessor} from './interfaces'
 
 export default class PlaybackModeProcessor implements ApplicationModeProcessor {

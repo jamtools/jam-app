@@ -1,5 +1,5 @@
-import {OutputDevice, OutputMessage, WebMidiOutput, MidiEvent} from '../interfaces'
-import {Chord, Note} from '../../model-interfaces'
+import {OutputDevice, OutputMessage, WebMidiOutput, MidiEvent} from '../../types/interfaces'
+import {Chord, Note} from '../../types/model-interfaces'
 
 export default class WebMidiOutputWrapper implements OutputDevice {
   currentChord: Chord
