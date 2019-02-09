@@ -49,7 +49,7 @@ deploys3:
     - pip install awscli # Install the SDK
   script:
     - aws s3 cp dist s3://${BUCKET_NAME} --recursive --exclude index.html # Replace example-bucket with your bucket
-    - aws s3 cp dist/index.html s3://$S3_BUCKET_NAME/index.html --cache-control max-age=0,no-cache,no-store,must-revalidate
+    - aws s3 cp dist/index.html  s3://${BUCKET_NAME}/index.html --cache-control max-age=0,no-cache,no-store,must-revalidate
   environment:
     name: ${CI_COMMIT_REF_SLUG}
     url: http://${BUCKET_NAME}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_SLUG}  # This is the url of the bucket we saved before
