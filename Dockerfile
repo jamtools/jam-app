@@ -5,8 +5,9 @@ WORKDIR /app
 
 COPY package.json .
 COPY yarn.lock .
+
 RUN yarn install
 
 COPY . .
 
-CMD node ws-server
+CMD node server/index.js
