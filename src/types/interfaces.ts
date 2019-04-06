@@ -2,13 +2,14 @@ import {Observable} from 'rxjs'
 import {Chord, Note} from './model-interfaces'
 
 export interface InputMessage {
-
+  note?: Note,
+  notes: Note[],
 }
 
 export interface InputDevice {
   getCurrentlyHeldDownNotes(): Array<Note>
   getName(): string
-  observable: Observable<Array<Note>>
+  observable: Observable<InputMessage>
 }
 
 export interface OutputMessage {

@@ -25,6 +25,7 @@ export default function Piano(props: Props) {
   // }
 
   const pressedKey = useActions((actions: Actions<IGlobalStore>) => actions.pianoKeyProcessor.pressedKey)
+  const releasedKey = useActions((actions: Actions<IGlobalStore>) => actions.pianoKeyProcessor.releasedKey)
 
   const {heldDownNotes} = props
   const heldNumbers = heldDownNotes.map((note: Note) => note.number - 24)
@@ -36,8 +37,7 @@ export default function Piano(props: Props) {
         octaves={3}
         showComputerKeyNames={true}
         playNote={pressedKey}
-        stopNote={(midiNumber: number) => {
-        }}
+        stopNote={releasedKey}
         width={1000}
         // keyboardShortcuts={keyboardShortcuts}
         heldDownNotes={heldDownNotes}

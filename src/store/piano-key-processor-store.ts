@@ -1,6 +1,7 @@
 import {effect, thunk, Thunk} from 'easy-peasy'
 import {MidiNumbers} from 'react-piano'
-import { IGlobalStore } from './store-types';
+import { IGlobalStore, IPianoKeyProcessorStore } from './store-types';
+import ProgrammaticInput from '../midi_devices/inputs/programmatic-input';
 
 const fromNote =  MidiNumbers.fromNote
 const getNoteAttributes = MidiNumbers.getAttributes
@@ -9,26 +10,56 @@ const PianoConfig = {
   getOctaveRole: (octave: number) => 'ROOT_CHOICE',
 }
 
-export interface IPianoKeyProcessorStore {
-  pressedKey: Thunk<IPianoKeyProcessorStore, number, void, IGlobalStore>,
-}
-
 const PianoKeyProcessorStore: IPianoKeyProcessorStore = {
-  pressedKey: thunk(async (actions, midiNumber: number, {dispatch}) => {
-    const octaveRole = PianoConfig.getOctaveRole(midiNumber)
+  programmaticInput: undefined,
 
-    const note = getNoteAttributes(midiNumber)
-    const newChord = {
-      notes: [
-        {
-          name: note.pitchName,
-          octave: note.octave,
-          number: note.midiNumber,
-        }
-      ]
+  init: thunk((actions, _, {dispatch}) => {
+    const programmaticInput = new ProgrammaticInput()
+    dispatch.midiDevices.setInputMidiDevices([programmaticInput])
+    actions.setProgrammaticInput(programmaticInput)
+  }),
+
+  setProgrammaticInput: (state, input: ProgrammaticInput) => {
+    state.programmaticInput = input
+  },
+
+  pressedKey: thunk((actions, midiNumber: number, {dispatch, getState}) => {
+    const octaveRole = PianoConfig.getOctaveRole(midiNumber)
+    const input = getState().pianoKeyProcessor.programmaticInput
+
+    const noteAttributes = getNoteAttributes(midiNumber)
+    const note = {
+      name: noteAttributes.pitchName,
+      octave: noteAttributes.octave,
+      number: noteAttributes.midiNumber,
     }
 
-    dispatch.progressions.addChordToProgression(newChord)
+    if (input) {
+      input.noteOn(note)
+    }
+
+    const newChord = {
+      notes: [
+        note,
+      ],
+    }
+
+    // dispatch.progressions.addChordToProgression(newChord)
+  }),
+
+  releasedKey: thunk((actions, midiNumber: number, {dispatch, getState}) => {
+    const input = getState().pianoKeyProcessor.programmaticInput
+
+    const noteAttributes = getNoteAttributes(midiNumber)
+    const note = {
+      name: noteAttributes.pitchName,
+      octave: noteAttributes.octave,
+      number: noteAttributes.midiNumber,
+    }
+
+    if (input) {
+      input.noteOff(note)
+    }
   }),
 }
 

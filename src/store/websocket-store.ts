@@ -1,7 +1,5 @@
-import io, {Socket} from 'socket.io-client'
-import {effect, Effect, Action, Thunk, thunk, Dispatch, Store} from 'easy-peasy'
-import { dispatch } from 'rxjs/internal/observable/pairs';
-import { any } from 'prop-types';
+import io from 'socket.io-client'
+import {Action, Thunk, thunk} from 'easy-peasy'
 import { IGlobalStore, IHandleMessageActions } from './store-types';
 
 export type WebsocketMessage = {

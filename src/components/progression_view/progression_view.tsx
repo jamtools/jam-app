@@ -1,5 +1,4 @@
 import React from 'react'
-import {Button, ButtonGroup} from 'react-bootstrap'
 import {useStore, State} from 'easy-peasy'
 
 import styles from './progression_view.scss'
@@ -34,8 +33,8 @@ const ProgressionView = (props: Props) => {
 
   return (
     <React.Fragment>
-      {groups.map((group: Chord[]) => (
-        <div className={styles.progressionContainer}>
+      {groups.map((group: Chord[], i) => (
+        <div key={i} className={styles.progressionContainer}>
           {group.map((chord: Chord, i: number) => (
             <ChordComponent chord={chord} key={i} />
           ))}

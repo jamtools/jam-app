@@ -6,38 +6,38 @@ import {
   // InputMessage,
   WebMidiInput,
   MidiEvent,
+  InputMessage,
 } from '../../types/interfaces'
 import {Note} from '../../types/model-interfaces'
 
 export default class WebMidiInputWrapper implements InputDevice {
   heldDownNotes: Array<Note> = []
-  observable: BehaviorSubject<Array<Note>>
+  observable: BehaviorSubject<InputMessage>
   observer: any
 
   constructor(private webMidiInput: WebMidiInput) {
     webMidiInput.addListener('noteon', 'all', e => this.noteOn(e))
     webMidiInput.addListener('noteoff', 'all', e => this.noteOff(e))
 
-    this.observable = new BehaviorSubject<Array<Note>>([])
+    this.observable = new BehaviorSubject<InputMessage>({notes: []})
   }
 
   getCurrentlyHeldDownNotes(): Array<Note> {
     return this.heldDownNotes
   }
 
-  @log('debug')
+  // @log('debug')
   noteOff(e: MidiEvent) {
     const targetNoteNumber = e.note.number
-    const arrayMember = this.heldDownNotes.find(note => note.number === targetNoteNumber)
-    this.heldDownNotes.splice(this.heldDownNotes.indexOf(arrayMember), 1)
-    this.observable.next([...this.heldDownNotes])
+    const index = this.heldDownNotes.findIndex(note => note.number === targetNoteNumber)
+    this.heldDownNotes.splice(index, 1)
+    this.observable.next({notes: [...this.heldDownNotes]})
   }
 
-
-  @log('debug')
+  // @log('debug')
   noteOn(e: MidiEvent) {
     this.heldDownNotes.push(e.note)
-    this.observable.next([...this.heldDownNotes])
+    this.observable.next({note: e.note, notes: [...this.heldDownNotes]})
   }
 
   destroy() {
