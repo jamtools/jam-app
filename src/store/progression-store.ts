@@ -100,6 +100,8 @@ const ProgressionStore: IProgressionStore = {
     })
   }),
 
+  saveProgression: thunk(() => {}),
+
   handleNotes: thunk((actions, notes) => {
     // needs to know if release
     const triad = findTriad(notes)

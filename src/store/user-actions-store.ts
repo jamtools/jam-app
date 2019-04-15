@@ -9,7 +9,7 @@ const UserActionsStore: IUserActionsStore = {
   assignedControls: {},
   selectedControl: undefined,
 
-  clickedControl: (state, control) => {
+  clickedAssign: (state, control) => {
     if (state.selectedControl === control) {
       state.selectedControl = undefined
     }
@@ -17,6 +17,20 @@ const UserActionsStore: IUserActionsStore = {
       state.selectedControl = control
     }
   },
+
+  clickedDo: thunk((actions, control) => {
+    actions.performAction(control)
+  }),
+
+  performAction: thunk((actions, control, {dispatch}) => {
+    const userActions = {
+      [UserControls.NextLine]: dispatch.progressions.newProgression,
+      [UserControls.DeleteProgression]: dispatch.progressions.deleteProgression,
+      [UserControls.DeleteChord]: dispatch.progressions.deleteChord,
+      [UserControls.SaveProgression]: () => {},
+    }
+    userActions[control]()
+  }),
 
   assignControl: (state, {control, key}) => {
     const assignedControls = state.assignedControls as INumberNumberMap
@@ -31,20 +45,14 @@ const UserActionsStore: IUserActionsStore = {
     const key = inputMessage.note.number
 
     if (selectedControl !== undefined) {
-      actions.clickedControl(selectedControl)
+      actions.clickedAssign(selectedControl)
 
       actions.assignControl({control: selectedControl, key: key})
       return
     }
 
     if (assignedControls[key]) {
-      const actions = {
-        [UserControls.NextLine]: dispatch.progressions.newProgression,
-        [UserControls.DeleteProgression]: dispatch.progressions.deleteProgression,
-        [UserControls.DeleteChord]: dispatch.progressions.deleteChord,
-        [UserControls.SaveProgression]: () => {},
-      }
-      actions[assignedControls[key]]()
+      actions.performAction(assignedControls[key])
       return
     }
 

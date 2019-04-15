@@ -32,6 +32,7 @@ export interface IProgressionStore {
   newProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
   deleteChord: Thunk<IProgressionStore, void, void, IGlobalStore>,
   deleteProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
+  saveProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
   handleNotes: Thunk<IProgressionStore, Note[], void, IGlobalStore>,
   progressions: Progression[],
 }
@@ -68,7 +69,9 @@ export interface IUserActionsStore {
   selectedControl?: UserControls,
 
   assignControl: Action<IUserActionsStore, {control: UserControls, key: number}>,
-  clickedControl: Action<IUserActionsStore, UserControls>,
+  clickedAssign: Action<IUserActionsStore, UserControls>,
+  clickedDo: Thunk<IUserActionsStore, UserControls, void, IGlobalStore>,
+  performAction: Thunk<IUserActionsStore, UserControls, void, IGlobalStore>,
   pressedKey: Thunk<IUserActionsStore, InputMessage, void, IGlobalStore>,
   releasedKey: Thunk<IUserActionsStore, InputMessage, void, IGlobalStore>,
 }
