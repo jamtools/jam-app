@@ -5,7 +5,6 @@ import { InputDevice, OutputDevice } from '../types/interfaces';
 import connectToMidi from '../midi_devices/connectors/web-midi-connector';
 import { Note } from '../types/model-interfaces';
 import { Subscription } from 'rxjs';
-import { findTriad } from '../midi_processing/chord-processor';
 
 const fromNote =  MidiNumbers.fromNote
 const getNoteAttributes = MidiNumbers.getAttributes
@@ -39,19 +38,16 @@ const MidiDeviceStore: IMidiDeviceStore = {
       state.midiDevices.activeInputSubscription.unsubscribe()
     }
 
-    const subscription = input.observable.subscribe(({note, notes}) => {
-      const state = getState() as IGlobalStore
-      if (!notes) {
+    const subscription = input.observable.subscribe((inputMessage) => {
+      if (!inputMessage) {
         return
       }
-      const triad = findTriad(notes)
-      if (triad) {
-        console.log('Triad', triad)
-        dispatch.progressions.addChordToProgression(triad)
-        const output = state.midiDevices.activeOutput
-        if (output) {
-          output.playChord(triad)
-        }
+
+      if (inputMessage.pressed) {
+        dispatch.userActions.pressedKey(inputMessage)
+      }
+      else {
+        dispatch.userActions.releasedKey(inputMessage)
       }
     })
 

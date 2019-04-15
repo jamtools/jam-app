@@ -1,36 +1,116 @@
-import {effect, thunk} from 'easy-peasy'
+import {thunk} from 'easy-peasy'
+import produce from 'immer'
 
-import {Chord}  from '../types/model-interfaces'
+import {Chord, Progression}  from '../types/model-interfaces'
 import { IProgressionStore } from './store-types';
 import { WebsocketMessage } from './websocket-store';
+import { findTriad } from '../midi_processing/chord-processor';
 
 const ProgressionStore: IProgressionStore = {
-  updateProgression: (state, chords: Chord[]) => {
-    state.chords = chords
+  progressions: [] as Progression[],
+
+  updateProgressions: (state, progressions: Progression[]) => {
+    state.progressions = progressions
   },
-  updateProgressionFromMessage: (state, message: WebsocketMessage) => {
-    state.chords = message.data
+
+  updateProgressionsFromMessage: (state, message: WebsocketMessage) => {
+    state.progressions = message.data
   },
-  addChordToProgression: thunk(async (actions, chord: Chord, {getState, dispatch}) => {
-    const oldChords = getState().progressions.chords
-    const chords = oldChords.concat([chord])
-    actions.updateProgression(chords)
+
+  addChordToProgression: thunk((actions, chord: Chord, {getState, dispatch}) => {
+    const state = getState()
+    const {progressions} = state.progressions
+
+    const result = produce(progressions, progs => {
+      if (!progs.length) {
+        progs.push({chords: []})
+      }
+
+      progs.last().chords.push(chord)
+    })
+
+    actions.updateProgressions(result)
     dispatch.websocket.sendMessage({
-      type: 'updateProgression',
-      data: chords,
+      type: 'updateProgressions',
+      data: result,
     })
   }),
-  chords: [
-    // {
-    //   notes: [
-    //     {
-    //       number: 84,
-    //       name: 'C',
-    //       octave: 5,
-    //     },
-    //   ],
-    // },
-  ] as Chord[],
+
+  deleteChord: thunk((actions, _, {getState, dispatch}) => {
+    const state = getState()
+    const {progressions} = state.progressions
+    const progression = progressions.last()
+
+    if (!progression || !progression.chords.length) {
+      return
+    }
+
+    const result = produce(progressions, progs => {
+      progs.last().chords.pop()
+    })
+
+    actions.updateProgressions(result)
+    dispatch.websocket.sendMessage({
+      type: 'updateProgressions',
+      data: result,
+    })
+  }),
+
+  deleteProgression: thunk((actions, _, {getState, dispatch}) => {
+    const state = getState()
+    const {progressions} = state.progressions
+
+    if (!progressions.length) {
+      return
+    }
+
+    const progression = progressions.last()
+    if (!progression.chords.length) {
+      return
+    }
+
+    const result = produce(progressions, progs => {
+      progs.pop()
+    })
+
+    actions.updateProgressions(result)
+    dispatch.websocket.sendMessage({
+      type: 'updateProgressions',
+      data: result,
+    })
+  }),
+
+  newProgression: thunk((actions, _, {getState, dispatch}) => {
+    const state = getState()
+    const {progressions} = state.progressions
+
+    const progression = progressions.last()
+    if (progression && !progression.chords.length) {
+      return
+    }
+
+    const result = produce(progressions, progs => {
+      progs.push({chords: []})
+    })
+
+    actions.updateProgressions(result)
+    dispatch.websocket.sendMessage({
+      type: 'updateProgressions',
+      data: result,
+    })
+  }),
+
+  handleNotes: thunk((actions, notes) => {
+    // needs to know if release
+    const triad = findTriad(notes)
+    if (triad) {
+      actions.addChordToProgression(triad)
+      // const output = state.midiDevices.activeOutput
+      // if (output) {
+      //   output.playChord(triad)
+      // }
+    }
+  }),
 }
 
 export default ProgressionStore

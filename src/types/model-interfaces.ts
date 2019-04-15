@@ -5,7 +5,11 @@ export interface Note {
 }
 
 export interface Chord {
-  notes: Array<Note>
+  notes: Note[]
+}
+
+export interface Progression {
+  chords: Chord[]
 }
 
 export interface NoteCollection {

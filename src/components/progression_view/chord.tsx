@@ -5,7 +5,7 @@ import { Chord } from '../../types/model-interfaces'
 
 import styles from './progression_view.scss'
 import ChordName from './chord-name'
-import DumbPiano from '../dumb-piano';
+import DumbPiano from '../piano/dumb-piano';
 
 type Props = {
   chord: Chord,
@@ -14,19 +14,21 @@ type Props = {
 export default function ChordComponent(props: Props) {
   const {chord} = props
 
-  const selected = Math.random() > 0.5
-  const selectedClass = selected ? styles.selectedChord : ''
+  // const selected = Math.random() > 0.5
+  // const selectedClass = selected ? styles.selectedChord : ''
+
+  const selectedClass = ''
 
   return (
     <div className={classnames(styles.entireChordContainer, selectedClass)}>
-      <DumbPiano
+      {/* <DumbPiano
         height='100px'
         playNote={() => console.log('special')}
         // noteRange={{ first: firstNote, last: lastNote }}
         width={200}
         // keyboardShortcuts={keyboardShortcuts}
         heldDownNotes={chord.notes}
-      />
+      /> */}
       <ChordName chord={chord} />
     </div>
   )

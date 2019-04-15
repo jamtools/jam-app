@@ -5,10 +5,14 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const cors = require('cors')
 
-server.listen(1337)
+server.listen(process.env.PORT || 1337)
 
 app.use(cors())
 app.use(bodyParser())
+
+app.get('/', (req, res) => {
+  res.send('Hey')
+})
 
 io.on('connection', (socket) => {
   console.log('New connection to jam room.')

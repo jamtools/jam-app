@@ -2,38 +2,57 @@ import React from 'react'
 import {StoreProvider} from 'easy-peasy'
 
 import {Chord, Note} from './types/model-interfaces'
-import Piano from './components/piano'
+import Piano from './components/piano/piano'
 import {InputDevice, OutputDevice} from './types/interfaces'
 import ProgressionView from './components/progression_view/progression_view'
 import store, {StoreInit} from './store/store'
 import MidiDeviceChooser from './components/midi-device-chooser/midi-device-chooser';
+import UserControlsComponent from './components/user-controls/user-controls';
 
 interface MainState {
   currentMode: string
   chords: Chord[],
   heldDownNotes: Note[],
+  show: boolean,
 }
 
-export class Main extends React.PureComponent {
+export function Main() {
+  return (
+    <StoreProvider store={store}>
+      <StoreInit>
+        <InnerMain />
+      </StoreInit>
+    </StoreProvider>
+  )
+}
+
+export class InnerMain extends React.PureComponent {
 
   state : MainState = {
     currentMode: 'recording',
     chords: [],
     heldDownNotes: [],
+    show: false,
   }
   render() {
-    const {heldDownNotes} = this.state
+    const {heldDownNotes, show} = this.state
+
+    const buttonText = show ? 'Hide' : 'Show'
+    const display = show ? '' : 'none'
+    const showOrHide = () => this.setState({show: !show})
 
     return (
-      <StoreProvider store={store}>
-        <StoreInit>
+      <div>
+        <button onClick={showOrHide}>{buttonText}</button>
+        <div style={{display}}>
+          <UserControlsComponent />
           <MidiDeviceChooser />
           <div>
             <Piano heldDownNotes={heldDownNotes} />
-            <ProgressionView />
           </div>
-        </StoreInit>
-      </StoreProvider>
+        </div>
+        <ProgressionView />
+      </div>
     )
   }
 }

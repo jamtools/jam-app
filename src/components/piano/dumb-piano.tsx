@@ -22,7 +22,7 @@ const getMeaningfulNote = (note: Note) => {
   return (note.number % 12) + 48
 }
 
-import {Note, MidiNumber} from '../types/model-interfaces'
+import {Note, MidiNumber} from '../../types/model-interfaces'
 
 type PianoState = {
   heldDownNotes: MidiNumber[],

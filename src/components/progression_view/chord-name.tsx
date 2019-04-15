@@ -25,7 +25,6 @@ export default function ChordName(props: Props) {
     label = isMinor ? name + 'm' : name
   }
 
-  console.log(label)
 
   return (
     <div className={styles.noteNameContainer}>

@@ -1,9 +1,8 @@
 import {Observable, BehaviorSubject} from 'rxjs'
 import {logBefore as log} from '../../Logger'
-// import Config from '../../Config'
+
 import {
   InputDevice,
-  // InputMessage,
   WebMidiInput,
   MidiEvent,
   InputMessage,
@@ -31,13 +30,13 @@ export default class WebMidiInputWrapper implements InputDevice {
     const targetNoteNumber = e.note.number
     const index = this.heldDownNotes.findIndex(note => note.number === targetNoteNumber)
     this.heldDownNotes.splice(index, 1)
-    this.observable.next({notes: [...this.heldDownNotes]})
+    this.observable.next({pressed: false, note: e.note, notes: [...this.heldDownNotes]})
   }
 
   // @log('debug')
   noteOn(e: MidiEvent) {
     this.heldDownNotes.push(e.note)
-    this.observable.next({note: e.note, notes: [...this.heldDownNotes]})
+    this.observable.next({pressed: true, note: e.note, notes: [...this.heldDownNotes]})
   }
 
   destroy() {

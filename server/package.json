@@ -1,0 +1,24 @@
+{
+  "name": "midi-jam-helper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": "git@github.com:mickmister/midi-jam-helper.git",
+  "author": "mickmister <mjkochell@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-plugin-header": "^2.0.0",
+    "eslint-plugin-react-hooks": "^0.0.0",
+    "eslint-plugin-typescript": "^0.13.0",
+    "nodemon": "^1.17.5"
+  }
+}

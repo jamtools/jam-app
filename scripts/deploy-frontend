@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export $(egrep -v '^#' .env | xargs) # parse env file
+
+NODE_ENV=$NODE_ENV yarn build
+aws s3 cp ./dist s3://${BUCKET_NAME} --recursive --exclude index.html
+aws s3 cp ./dist/index.html  s3://${BUCKET_NAME}/index.html --cache-control max-age=0,no-cache,no-store,must-revalidate
