@@ -1,22 +1,29 @@
-import {createStore, thunk, useActions, Actions} from 'easy-peasy'
+import {createStore, thunk, useActions, Actions, EasyPeasyConfig} from 'easy-peasy'
 
 import LocalProgressionStore from './progression-store'
-import PianoKeyProcessorStore from './piano-key-processor-store'
+import ProgrammaticInputProcessorStore from './programmatic-input-processor-store'
 import WebsocketStore from './websocket-store'
 
 import {initialState, saveState} from './persist-state'
 import { IGlobalStore } from './store-types'
 import { useEffect } from 'react';
 
-const store = createStore<IGlobalStore>({
+import MidiDeviceStore from './midi-device-store';
+import UserActionsStore from './user-actions-store';
+
+const store = createStore<IGlobalStore, EasyPeasyConfig>({
   progressions: LocalProgressionStore,
-  pianoKeyProcessor: PianoKeyProcessorStore,
+  programmaticInputProcessor: ProgrammaticInputProcessorStore,
   websocket: WebsocketStore,
+  midiDevices: MidiDeviceStore,
+  userActions: UserActionsStore,
   // settings: {},
   store: {
     init: thunk((actions, _, {dispatch}) => {
       // dispatch.users.fetchUsers()
-      dispatch.websocket.init()
+      dispatch.websocket.init(null)
+      dispatch.midiDevices.init(null)
+      dispatch.programmaticInputProcessor.init(null)
     }),
   },
 }, {
@@ -30,7 +37,7 @@ store.subscribe(() => {
 export function StoreInit(props: {children: any}) {
   const init = useActions((actions: Actions<IGlobalStore>) => actions.store.init)
   useEffect(() => {
-    init()
+    init(null)
   })
 
   return props.children

@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Main} from './main'
+import './polyfills'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+import './styles/global.scss'
+
+import {Main} from './main'
 
 const root = document.getElementById('main')
 ReactDOM.render(<Main />, root)

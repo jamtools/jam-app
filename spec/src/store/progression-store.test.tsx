@@ -13,10 +13,10 @@ const wait = () => new Promise((r => {
   setTimeout(r, 0)
 }))
 
-describe('ProgressionContext', () => {
+describe('ProgressionStore', () => {
 
   beforeEach(async () => {
-    store.dispatch.progressions.updateProgression([])
+    store.dispatch.progressions.updateProgressions([{chords: []}])
     return wait()
   })
 
@@ -24,7 +24,7 @@ describe('ProgressionContext', () => {
     it('adds a chord to the progression', async () => {
       let capturedChords
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
       chai.expect(capturedChords).to.deep.equal([])
 
       const chord: Chord = {
@@ -41,16 +41,17 @@ describe('ProgressionContext', () => {
 
       await wait()
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
+      console.log(store.getState().progressions.progressions)
       chai.expect(capturedChords).to.deep.equal([chord])
     })
   })
 
-  describe('updateProgression', () => {
+  describe('updateProgressions', () => {
     it('sets progression to passed-in parameter', async () => {
       let capturedChords
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
       chai.expect(capturedChords).to.deep.equal([])
 
       const chord: Chord = {
@@ -63,20 +64,22 @@ describe('ProgressionContext', () => {
         ]
       }
 
-      store.dispatch.progressions.updateProgression([chord])
+      store.dispatch.progressions.updateProgressions([{
+        chords: [chord]},
+      ])
 
       await wait()
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
       chai.expect(capturedChords).to.deep.equal([chord])
     })
   })
 
-  describe('updateProgressionFromMessage', () => {
+  describe('updateProgressionsFromMessage', () => {
     it('sets progression to passed-in websocket message', async () => {
       let capturedChords
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
       chai.expect(capturedChords).to.deep.equal([])
 
       const chord: Chord = {
@@ -89,11 +92,13 @@ describe('ProgressionContext', () => {
         ]
       }
 
-      store.dispatch.progressions.updateProgressionFromMessage({type: 'updateProgression', data: [chord]})
+      store.dispatch.websocket.handleMessage({type: 'updateProgressions', data: [
+        {chords: [chord]},
+      ]})
 
       await wait()
 
-      capturedChords = store.getState().progressions.chords
+      capturedChords = store.getState().progressions.progressions[0].chords
       chai.expect(capturedChords).to.deep.equal([chord])
     })
   })

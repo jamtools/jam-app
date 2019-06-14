@@ -1,7 +1,7 @@
 import React from 'react'
-import {IStringTMap} from '../util/interfaces'
-import {OutputDevice} from '../types/interfaces'
-import {Chord, Note} from '../types/model-interfaces'
+import {IStringTMap} from '../../util/interfaces'
+import {OutputDevice} from '../../types/interfaces'
+import {Chord, Note} from '../../types/model-interfaces'
 
 interface IProps {
   output: OutputDevice

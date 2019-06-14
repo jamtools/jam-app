@@ -21,11 +21,11 @@ export const saveState = (state: State<IGlobalStore>) => {
     const check = localStorage
   }
   catch(e) {
-    return
+    return {}
   }
 
   if (!state) {
-    return
+    return {}
   }
   const toPersist = {
     // users: state.users,

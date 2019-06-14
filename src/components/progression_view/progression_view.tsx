@@ -1,10 +1,8 @@
 import React from 'react'
-import {Button, ButtonGroup} from 'react-bootstrap'
 import {useStore, State} from 'easy-peasy'
 
 import styles from './progression_view.scss'
-import { Chord, Note } from '../../types/model-interfaces'
-import DumbPiano from '../dumb-piano'
+import { Chord, Note, Progression } from '../../types/model-interfaces'
 import { IGlobalStore } from '../../store/store-types'
 
 import ChordComponent from './chord'
@@ -24,19 +22,19 @@ const getGroupsOfChords = (chords: Chord[]) => {
 }
 
 const ProgressionView = (props: Props) => {
-  const chords: Chord[] = useStore((state: State<IGlobalStore>) => state.progressions.chords)
+  const progressions: Progression[] = useStore((state: State<IGlobalStore>) => state.progressions.progressions)
 
-  const groups = getGroupsOfChords(chords)
+  // const groups = getGroupsOfChords(chords)
 
-  if (!chords) {
+  if (!progressions.length) {
     return <h1>No progression</h1>
   }
 
   return (
     <React.Fragment>
-      {groups.map((group: Chord[]) => (
-        <div className={styles.progressionContainer}>
-          {group.map((chord: Chord, i: number) => (
+      {progressions.map((progression, i) => (
+        <div key={i} className={styles.progressionContainer}>
+          {progression.chords.map((chord: Chord, i: number) => (
             <ChordComponent chord={chord} key={i} />
           ))}
           {/* <h1 className={styles.heading}>

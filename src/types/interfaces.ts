@@ -1,14 +1,17 @@
 import {Observable} from 'rxjs'
 import {Chord, Note} from './model-interfaces'
+import {Input, Output} from 'webmidi'
 
 export interface InputMessage {
-
+  note: Note,
+  notes: Note[],
+  pressed: boolean,
 }
 
 export interface InputDevice {
   getCurrentlyHeldDownNotes(): Array<Note>
   getName(): string
-  observable: Observable<Array<Note>>
+  observable: Observable<InputMessage>
 }
 
 export interface OutputMessage {
@@ -26,17 +29,9 @@ export interface MidiEvent {
   note: Note
 }
 
-export interface WebMidiInput {
-  addListener(eventType: string, channel: number | string, handler:(e: MidiEvent) => void): void
-  removeListener(): void
-  name: string
-}
+export type WebMidiInput = Input
 
-export interface WebMidiOutput {
-  playNote(note: any): void,
-  stopNote(note: any): void,
-  name: string,
-}
+export type WebMidiOutput = Output
 
 export interface MidiInitializer {
 

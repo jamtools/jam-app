@@ -2,7 +2,7 @@ import {OutputDevice, OutputMessage, WebMidiOutput, MidiEvent} from '../../types
 import {Chord, Note} from '../../types/model-interfaces'
 
 export default class WebMidiOutputWrapper implements OutputDevice {
-  currentChord: Chord
+  currentChord?: Chord
   constructor(private webMidiOutput: WebMidiOutput) {
   }
 
@@ -14,8 +14,6 @@ export default class WebMidiOutputWrapper implements OutputDevice {
   }
 
   playChord(chord: Chord) {
-    debugger
-    console.log(chord)
     const notes = chord.notes.map(n => `${n.name}${n.octave}`)
     this.webMidiOutput.playNote(notes)
     const cur = this.currentChord

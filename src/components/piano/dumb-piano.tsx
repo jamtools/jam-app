@@ -22,7 +22,7 @@ const getMeaningfulNote = (note: Note) => {
   return (note.number % 12) + 48
 }
 
-import {Note, MidiNumber} from '../types/model-interfaces'
+import {Note, MidiNumber} from '../../types/model-interfaces'
 
 type PianoState = {
   heldDownNotes: MidiNumber[],
@@ -53,7 +53,6 @@ export default function DumbPiano(props: Props) {
   if (heldDownNotes && heldDownNotes.length) {
     ls.push(getMeaningfulNote(heldDownNotes[0]))
   }
-  console.log(ls)
 
   return (
     <div style={{height: props.height || '240px'}}>
