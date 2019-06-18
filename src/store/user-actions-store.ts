@@ -28,6 +28,7 @@ const UserActionsStore: IUserActionsStore = {
       [UserControls.DeleteProgression]: dispatch.progressions.deleteProgression,
       [UserControls.DeleteChord]: dispatch.progressions.deleteChord,
       [UserControls.SaveProgression]: () => {},
+      [UserControls.StopAllNotes]: dispatch.midiDevices.stopAllNotes,
     }
     userActions[control]()
   }),
@@ -61,7 +62,7 @@ const UserActionsStore: IUserActionsStore = {
       return
     }
 
-    dispatch.progressions.handleNotes(notes)
+    dispatch.progressions.handleNotes(inputMessage)
   }),
   releasedKey: thunk((actions, inputMessage: InputMessage) => {
 

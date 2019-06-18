@@ -20,6 +20,8 @@ export interface OutputMessage {
 
 export interface OutputDevice {
   playChord(chord: Chord): void
+  playNote(note: Note): void
+  stopNote(note: Note): void
   stopAllVoices(): void
   getName(): string
 }

@@ -33,7 +33,7 @@ export interface IProgressionStore {
   deleteChord: Thunk<IProgressionStore, void, void, IGlobalStore>,
   deleteProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
   saveProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
-  handleNotes: Thunk<IProgressionStore, Note[], void, IGlobalStore>,
+  handleNotes: Thunk<IProgressionStore, InputMessage, void, IGlobalStore>,
   progressions: Progression[],
 }
 
@@ -55,6 +55,8 @@ export interface IMidiDeviceStore {
   activeOutput?: OutputDevice,
   selectedActiveOutput: Thunk<IMidiDeviceStore, OutputDevice>,
   setActiveOutput: Action<IMidiDeviceStore, OutputDevice>,
+
+  stopAllNotes: Action<IMidiDeviceStore>,
 }
 
 export enum UserControls {
@@ -62,6 +64,7 @@ export enum UserControls {
   DeleteChord = 2,
   DeleteProgression = 3,
   SaveProgression = 4,
+  StopAllNotes = 5,
 }
 
 export interface IUserActionsStore {

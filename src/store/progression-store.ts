@@ -2,9 +2,9 @@ import {thunk} from 'easy-peasy'
 import produce from 'immer'
 
 import {Chord, Progression}  from '../types/model-interfaces'
-import { IProgressionStore } from './store-types';
-import { WebsocketMessage } from './websocket-store';
-import { findTriad } from '../midi_processing/chord-processor';
+import { IProgressionStore } from './store-types'
+import { WebsocketMessage } from './websocket-store'
+import { findTriad, getRootModeChord } from '../midi_processing/chord-processor'
 
 const ProgressionStore: IProgressionStore = {
   progressions: [] as Progression[],
@@ -102,15 +102,28 @@ const ProgressionStore: IProgressionStore = {
 
   saveProgression: thunk(() => {}),
 
-  handleNotes: thunk((actions, notes) => {
+  handleNotes: thunk((actions, inputMessage, {getState}) => {
     // needs to know if release
-    const triad = findTriad(notes)
-    if (triad) {
-      actions.addChordToProgression(triad)
-      // const output = state.midiDevices.activeOutput
-      // if (output) {
-      //   output.playChord(triad)
-      // }
+
+    const output = getState().midiDevices.activeOutput
+    if (inputMessage.pressed && output) {
+      const note = inputMessage.note
+      const chord = getRootModeChord(note, 4)
+      if (chord) {
+        output.playChord(chord)
+      }
+      else {
+        output.playNote(note)
+      }
+
+      const triad = findTriad(inputMessage.notes)
+      if (triad) {
+        const output = getState().midiDevices.activeOutput
+        if (output) {
+          // output.playChord(triad)
+        }
+        // actions.addChordToProgression(triad)
+      }
     }
   }),
 }

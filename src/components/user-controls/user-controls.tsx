@@ -23,6 +23,7 @@ export default function UserControlsComponent(props: UserControlsProps) {
     {name: 'Delete Chord', key: UserControls.DeleteChord},
     {name: 'Delete Progression', key: UserControls.DeleteProgression},
     {name: 'Save Progression', key: UserControls.SaveProgression},
+    {name: 'Stop All Notes', key: UserControls.StopAllNotes},
   ]
 
   return (

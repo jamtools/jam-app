@@ -1,10 +1,12 @@
 import {thunk, Actions, Store} from 'easy-peasy'
 import {MidiNumbers} from 'react-piano'
-import { IGlobalStore, IMidiDeviceStore } from './store-types';
-import { InputDevice, OutputDevice } from '../types/interfaces';
-import connectToMidi from '../midi_devices/connectors/web-midi-connector';
-import { Note } from '../types/model-interfaces';
-import { Subscription } from 'rxjs';
+import { IGlobalStore, IMidiDeviceStore } from './store-types'
+import { InputDevice, OutputDevice } from '../types/interfaces'
+import connectToMidi from '../midi_devices/connectors/web-midi-connector'
+import { Note } from '../types/model-interfaces'
+import { Subscription } from 'rxjs'
+import SoftwareSynthOutput from '../midi_devices/outputs/software-synth-output'
+import SoundfontOutput from '../midi_devices/outputs/soundfont-output'
 
 const fromNote =  MidiNumbers.fromNote
 const getNoteAttributes = MidiNumbers.getAttributes
@@ -23,13 +25,23 @@ const MidiDeviceStore: IMidiDeviceStore = {
     connectToMidi((inputs: InputDevice[], outputs: OutputDevice[]) => {
       actions.setInputMidiDevices(inputs)
       actions.setOutputMidiDevices(outputs)
-    })
+  })
+
+    const softwareSynthOutput = new SoftwareSynthOutput()
+    const soundfontOutput = new SoundfontOutput()
+
+    actions.setOutputMidiDevices([softwareSynthOutput, soundfontOutput])
+    actions.setActiveOutput(soundfontOutput)
   }),
   setInputMidiDevices: (state, inputs: InputDevice[]) => {
     state.inputDevices = state.inputDevices.concat(inputs)
   },
   setOutputMidiDevices: (state, outputs: OutputDevice[]) => {
     state.outputDevices = state.outputDevices.concat(outputs)
+  },
+
+  stopAllNotes: (state) => {
+    state.activeOutput.stopAllVoices()
   },
 
   selectedActiveInput: thunk((actions, input, {dispatch, getState}) => {

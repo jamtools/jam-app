@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:10.16-stretch
 
 RUN mkdir /app
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
 
-RUN yarn install
+RUN yarn install --force
 
 COPY . .
 
