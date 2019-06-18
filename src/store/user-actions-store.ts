@@ -29,6 +29,7 @@ const UserActionsStore: IUserActionsStore = {
       [UserControls.DeleteChord]: dispatch.progressions.deleteChord,
       [UserControls.SaveProgression]: () => {},
       [UserControls.StopAllNotes]: dispatch.midiDevices.stopAllNotes,
+      [UserControls.SelectScale]: dispatch.progressions.willSelectScale,
     }
     userActions[control]()
   }),

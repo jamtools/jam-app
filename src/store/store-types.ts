@@ -1,6 +1,6 @@
 import { Action, Thunk } from 'easy-peasy'
 import { WebsocketMessage, IWebsocketStore } from './websocket-store'
-import { Chord, Progression, Note } from '../types/model-interfaces'
+import { Chord, Progression, Note, Scale } from '../types/model-interfaces'
 import { InputDevice, OutputDevice, InputMessage } from '../types/interfaces'
 import { Subscription } from 'rxjs'
 import ProgrammaticInput from '../midi_devices/inputs/programmatic-input'
@@ -26,6 +26,11 @@ export interface IProgrammaticInputProcessorStore {
 }
 
 export interface IProgressionStore {
+  willSelectScale: Action<IProgressionStore>,
+  selectingScale: boolean,
+  didSelectScale: Action<IProgressionStore, string>,
+  currentScale: Scale,
+
   updateProgressions: Action<IProgressionStore, Progression[]>,
   updateProgressionsFromMessage: Action<IProgressionStore, WebsocketMessage>,
   addChordToProgression: Thunk<IProgressionStore, Chord, void, IGlobalStore>,
@@ -65,6 +70,7 @@ export enum UserControls {
   DeleteProgression = 3,
   SaveProgression = 4,
   StopAllNotes = 5,
+  SelectScale = 6,
 }
 
 export interface IUserActionsStore {

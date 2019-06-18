@@ -2,7 +2,7 @@ import React from 'react'
 import {useStore, State} from 'easy-peasy'
 
 import styles from './progression_view.scss'
-import { Chord, Note, Progression } from '../../types/model-interfaces'
+import { Chord, Note, Progression, Scale } from '../../types/model-interfaces'
 import { IGlobalStore } from '../../store/store-types'
 
 import ChordComponent from './chord'
@@ -23,15 +23,19 @@ const getGroupsOfChords = (chords: Chord[]) => {
 
 const ProgressionView = (props: Props) => {
   const progressions: Progression[] = useStore((state: State<IGlobalStore>) => state.progressions.progressions)
+  const scale: Scale = useStore((state: State<IGlobalStore>) => state.progressions.currentScale)
 
   // const groups = getGroupsOfChords(chords)
 
-  if (!progressions.length) {
-    return <h1>No progression</h1>
-  }
 
   return (
     <React.Fragment>
+      {scale && <h1>{scale.root} {scale.quality}</h1>}
+
+      {progressions.length === 0 && (
+        <h1>No progression</h1>
+      )}
+
       {progressions.map((progression, i) => (
         <div key={i} className={styles.progressionContainer}>
           {progression.chords.map((chord: Chord, i: number) => (
