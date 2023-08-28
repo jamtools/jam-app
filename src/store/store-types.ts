@@ -1,6 +1,6 @@
 import { Action, Thunk } from 'easy-peasy'
 import { WebsocketMessage, IWebsocketStore } from './websocket-store'
-import { Chord, Progression, Note } from '../types/model-interfaces'
+import { Chord, Progression, Note, Scale } from '../types/model-interfaces'
 import { InputDevice, OutputDevice, InputMessage } from '../types/interfaces'
 import { Subscription } from 'rxjs'
 import ProgrammaticInput from '../midi_devices/inputs/programmatic-input'
@@ -26,6 +26,11 @@ export interface IProgrammaticInputProcessorStore {
 }
 
 export interface IProgressionStore {
+  willSelectScale: Action<IProgressionStore>,
+  selectingScale: boolean,
+  didSelectScale: Action<IProgressionStore, string>,
+  currentScale: Scale,
+
   updateProgressions: Action<IProgressionStore, Progression[]>,
   updateProgressionsFromMessage: Action<IProgressionStore, WebsocketMessage>,
   addChordToProgression: Thunk<IProgressionStore, Chord, void, IGlobalStore>,
@@ -33,7 +38,7 @@ export interface IProgressionStore {
   deleteChord: Thunk<IProgressionStore, void, void, IGlobalStore>,
   deleteProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
   saveProgression: Thunk<IProgressionStore, void, void, IGlobalStore>,
-  handleNotes: Thunk<IProgressionStore, Note[], void, IGlobalStore>,
+  handleNotes: Thunk<IProgressionStore, InputMessage, void, IGlobalStore>,
   progressions: Progression[],
 }
 
@@ -55,6 +60,8 @@ export interface IMidiDeviceStore {
   activeOutput?: OutputDevice,
   selectedActiveOutput: Thunk<IMidiDeviceStore, OutputDevice>,
   setActiveOutput: Action<IMidiDeviceStore, OutputDevice>,
+
+  stopAllNotes: Action<IMidiDeviceStore>,
 }
 
 export enum UserControls {
@@ -62,6 +69,8 @@ export enum UserControls {
   DeleteChord = 2,
   DeleteProgression = 3,
   SaveProgression = 4,
+  StopAllNotes = 5,
+  SelectScale = 6,
 }
 
 export interface IUserActionsStore {

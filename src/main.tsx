@@ -1,6 +1,9 @@
 import React from 'react'
 import {StoreProvider} from 'easy-peasy'
 
+import './polyfills'
+import './styles/global.scss'
+
 import {Chord, Note} from './types/model-interfaces'
 import Piano from './components/piano/piano'
 import {InputDevice, OutputDevice} from './types/interfaces'
@@ -32,7 +35,7 @@ export class InnerMain extends React.PureComponent {
     currentMode: 'recording',
     chords: [],
     heldDownNotes: [],
-    show: false,
+    show: true,
   }
   render() {
     const {heldDownNotes, show} = this.state

@@ -18,11 +18,15 @@ export default function UserControlsComponent(props: UserControlsProps) {
   const clickedAssign = useActions((actions: Actions<IGlobalStore>) => actions.userActions.clickedAssign)
   const clickedDo = useActions((actions: Actions<IGlobalStore>) => actions.userActions.clickedDo)
 
+  const selectingScale = useStore((state: State<IGlobalStore>) => state.progressions.selectingScale) as boolean
+
   const buttons: ControlButtonConfig[] = [
     {name: 'Next Line', key: UserControls.NextLine},
     {name: 'Delete Chord', key: UserControls.DeleteChord},
     {name: 'Delete Progression', key: UserControls.DeleteProgression},
     {name: 'Save Progression', key: UserControls.SaveProgression},
+    {name: 'Stop All Notes', key: UserControls.StopAllNotes},
+    {name: 'Select Scale', key: UserControls.SelectScale},
   ]
 
   return (
@@ -41,7 +45,7 @@ export default function UserControlsComponent(props: UserControlsProps) {
         }
 
         return (
-          <div style={style} key={control.action}>
+          <div style={style} key={control.key}>
             <h2>{control.name}</h2>
             {existing && <h2>{existing % 12}</h2>}
             <button onClick={() => clickedAssign(control.key)}>Assign</button>

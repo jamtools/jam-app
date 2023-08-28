@@ -14,6 +14,7 @@ export default class WebMidiOutputWrapper implements OutputDevice {
   }
 
   playChord(chord: Chord) {
+    this.stopAllVoices()
     const notes = chord.notes.map(n => `${n.name}${n.octave}`)
     this.webMidiOutput.playNote(notes)
     const cur = this.currentChord

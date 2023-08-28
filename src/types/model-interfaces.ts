@@ -8,6 +8,11 @@ export interface Chord {
   notes: Note[]
 }
 
+export interface Scale {
+  root: Note
+  quality: string
+}
+
 export interface Progression {
   chords: Chord[]
 }
